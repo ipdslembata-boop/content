@@ -3,33 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Storytelling 4:5 — Minimalist Carousel Studio</title>
-    
-    <!-- Google Fonts: Plus Jakarta Sans & Inter (Karakteristik bersih, geometris, khas Samsung One UI / Samsung Sharp Sans) -->
+    <title>Storytelling Studio 4:5 — Minimalist Carousel Creator</title>
+
+    <!-- Google Fonts: Lora, Inter, Plus Jakarta Sans, DM Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome untuk Ikon Minimalis -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <!-- html2canvas & JSZip untuk Export PNG / ZIP -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg-app: #F5F5F7;
-            --bg-panel: #FFFFFF;
-            --border-color: #E5E5EA;
-            --text-primary: #111111;
-            --text-secondary: #6E6E73;
-            --accent: #000000;
-            --accent-hover: #2C2C2E;
-            --danger: #FF3B30;
-            --success: #34C759;
-            --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --ui-bg: #F3F4F6;
+            --ui-surface: #FFFFFF;
+            --ui-subtle: #F8FAFC;
+            --ui-border: #E2E8F0;
+            --ui-text: #0F172A;
+            --ui-muted: #64748B;
+            --ui-primary: #1E293B;
+            --ui-primary-hover: #0F172A;
+            --ui-accent: #2563EB;
+            --ui-success: #059669;
+            --ui-success-bg: #ECFDF5;
+            --ui-danger: #DC2626;
+            --ui-danger-bg: #FEF2F2;
+            --ui-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --radius-lg: 18px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
         }
 
         * {
@@ -39,236 +38,280 @@
         }
 
         body {
-            font-family: var(--font-body);
-            background-color: var(--bg-app);
-            color: var(--text-primary);
-            height: 100vh;
+            font-family: var(--ui-font);
+            background-color: var(--ui-bg);
+            color: var(--ui-text);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Top Navbar */
-        header {
-            height: 60px;
-            background: var(--bg-panel);
-            border-bottom: 1px solid var(--border-color);
-            padding: 0 24px;
+        /* Header Bar */
+        header.topbar {
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--ui-border);
+            padding: 10px 20px;
+        }
+
+        .topbar-inner {
+            max-width: 1500px;
+            margin: 0 auto;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            flex-shrink: 0;
-            z-index: 10;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
-        .brand {
+        .brand-wrap {
             display: flex;
             align-items: center;
             gap: 10px;
-            font-family: var(--font-display);
-            font-weight: 700;
-            font-size: 16px;
-            letter-spacing: -0.02em;
         }
 
-        .brand-badge {
-            font-size: 11px;
-            font-weight: 600;
-            background: #F2F2F7;
-            color: var(--text-secondary);
-            padding: 3px 8px;
-            border-radius: 6px;
-            letter-spacing: 0.02em;
-        }
-
-        .status-save {
+        .brand-logo {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: var(--ui-primary);
+            color: #FFFFFF;
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            color: var(--text-secondary);
-            background: #F9F9FB;
-            padding: 6px 12px;
-            border-radius: 20px;
-            border: 1px solid var(--border-color);
+            justify-content: center;
+            flex-shrink: 0;
         }
 
-        .status-dot {
-            width: 7px;
-            height: 7px;
+        .brand-title {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .brand-sub {
+            font-size: 11.5px;
+            color: var(--ui-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 2px;
+        }
+
+        .save-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 2px 8px;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 600;
+            background: var(--ui-success-bg);
+            color: var(--ui-success);
+        }
+
+        .save-dot {
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
-            background: var(--success);
+            background: var(--ui-success);
         }
 
         .header-actions {
             display: flex;
             align-items: center;
             gap: 8px;
+            flex-wrap: wrap;
         }
 
-        button {
-            font-family: var(--font-body);
-            cursor: pointer;
-            border: none;
-            outline: none;
-            transition: all 0.15s ease;
-        }
-
+        /* Buttons */
         .btn {
             display: inline-flex;
             align-items: center;
-            gap: 7px;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 500;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 13px;
+            border-radius: var(--radius-md);
+            font-family: var(--ui-font);
+            font-size: 12.5px;
+            font-weight: 600;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            white-space: nowrap;
         }
 
-        .btn-secondary {
-            background: #F2F2F7;
-            color: var(--text-primary);
-        }
-
-        .btn-secondary:hover {
-            background: #E5E5EA;
+        .btn:active {
+            transform: scale(0.98);
         }
 
         .btn-primary {
-            background: var(--accent);
+            background: var(--ui-primary);
             color: #FFFFFF;
         }
-
         .btn-primary:hover {
-            background: var(--accent-hover);
+            background: var(--ui-primary-hover);
         }
 
-        .btn-danger-ghost {
-            background: transparent;
-            color: var(--danger);
+        .btn-secondary {
+            background: #FFFFFF;
+            color: var(--ui-text);
+            border-color: var(--ui-border);
+        }
+        .btn-secondary:hover {
+            background: var(--ui-subtle);
+            border-color: #CBD5E1;
+        }
+
+        .btn-soft {
+            background: #EEF2FF;
+            color: #1D4ED8;
+        }
+        .btn-soft:hover {
+            background: #E0E7FF;
+        }
+
+        .btn-danger-soft {
+            background: var(--ui-danger-bg);
+            color: var(--ui-danger);
+        }
+        .btn-danger-soft:hover {
+            background: #FEE2E2;
+        }
+
+        .btn-sm {
             padding: 6px 10px;
+            font-size: 12px;
+            border-radius: var(--radius-sm);
         }
 
-        .btn-danger-ghost:hover {
-            background: rgba(255, 59, 48, 0.08);
-        }
-
-        /* Main Workspace */
-        .workspace {
-            display: flex;
+        /* Main 3-Column Studio Grid */
+        .studio-layout {
+            max-width: 1500px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 18px 20px;
+            display: grid;
+            grid-template-columns: 235px minmax(360px, 1fr) 365px;
+            gap: 20px;
+            align-items: start;
             flex: 1;
-            overflow: hidden;
         }
 
-        /* Left Sidebar: Slide List */
-        .sidebar-slides {
-            width: 240px;
-            background: var(--bg-panel);
-            border-right: 1px solid var(--border-color);
+        .panel-card {
+            background: var(--ui-surface);
+            border: 1px solid var(--ui-border);
+            border-radius: var(--radius-lg);
+            box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+        }
+
+        /* Left Column: Slide Navigator */
+        .slides-panel {
+            padding: 14px;
             display: flex;
             flex-direction: column;
-            flex-shrink: 0;
+            gap: 12px;
+            position: sticky;
+            top: 76px;
+            max-height: calc(100vh - 96px);
         }
 
-        .sidebar-header {
-            padding: 16px;
-            border-bottom: 1px solid var(--border-color);
+        .panel-head {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #F1F5F9;
         }
 
-        .sidebar-title {
+        .panel-title {
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.06em;
-            color: var(--text-secondary);
+            letter-spacing: 0.05em;
+            color: var(--ui-muted);
         }
 
-        .slides-list {
-            flex: 1;
+        .slides-scroll {
             overflow-y: auto;
-            padding: 12px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
+            padding-right: 2px;
         }
 
-        .slide-thumb {
-            border: 1.5px solid var(--border-color);
-            border-radius: 10px;
-            padding: 10px;
-            background: #FAFAFC;
+        .thumb-card {
+            border: 1.5px solid var(--ui-border);
+            border-radius: 12px;
+            padding: 10px 11px;
+            background: var(--ui-subtle);
             cursor: pointer;
             transition: all 0.15s ease;
-            position: relative;
         }
 
-        .slide-thumb:hover {
-            border-color: #AEAEB2;
+        .thumb-card:hover {
+            border-color: #94A3B8;
         }
 
-        .slide-thumb.active {
-            border-color: var(--accent);
+        .thumb-card.active {
+            border-color: var(--ui-primary);
             background: #FFFFFF;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
         }
 
-        .thumb-top {
+        .thumb-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 6px;
+            justify-content: space-between;
+            margin-bottom: 5px;
         }
 
-        .thumb-num {
-            font-size: 11px;
+        .thumb-badge {
+            font-size: 10.5px;
             font-weight: 700;
-            color: var(--text-secondary);
+            color: var(--ui-muted);
         }
 
-        .slide-thumb.active .thumb-num {
-            color: var(--accent);
+        .thumb-card.active .thumb-badge {
+            color: var(--ui-primary);
         }
 
-        .thumb-actions {
+        .thumb-controls {
             display: flex;
-            gap: 4px;
-            opacity: 0;
-            transition: opacity 0.15s;
+            gap: 3px;
         }
 
-        .slide-thumb:hover .thumb-actions,
-        .slide-thumb.active .thumb-actions {
-            opacity: 1;
-        }
-
-        .thumb-btn {
+        .mini-btn {
             width: 22px;
             height: 22px;
-            border-radius: 5px;
+            border-radius: 6px;
+            border: 1px solid transparent;
             background: transparent;
-            color: var(--text-secondary);
-            display: flex;
+            color: var(--ui-muted);
+            font-size: 11px;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 11px;
+            cursor: pointer;
         }
 
-        .thumb-btn:hover {
-            background: #E5E5EA;
-            color: var(--text-primary);
+        .mini-btn:hover {
+            background: #E2E8F0;
+            color: var(--ui-text);
         }
 
-        .thumb-btn.del:hover {
-            background: rgba(255, 59, 48, 0.12);
-            color: var(--danger);
+        .mini-btn.del:hover {
+            background: var(--ui-danger-bg);
+            color: var(--ui-danger);
         }
 
-        .thumb-preview-text {
+        .thumb-snippet {
             font-size: 12px;
-            color: var(--text-primary);
+            color: var(--ui-text);
             line-height: 1.4;
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -277,38 +320,27 @@
             word-break: break-word;
         }
 
-        .sidebar-footer {
-            padding: 12px;
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        /* Center Canvas Area (4:5 Preview) */
-        .canvas-stage {
-            flex: 1;
+        /* Center Column: 4:5 Live Canvas Preview */
+        .stage-area {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 24px;
-            overflow-y: auto;
-            position: relative;
+            padding: 8px 0 24px 0;
         }
 
-        .canvas-wrapper {
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0,0,0,0.05);
-            border-radius: 4px;
+        .canvas-frame {
+            box-shadow: 0 24px 54px rgba(15, 23, 42, 0.11), 0 2px 6px rgba(15, 23, 42, 0.04);
+            border-radius: 6px;
             overflow: hidden;
             transition: transform 0.2s ease;
         }
 
-        /* Rasio Exact 4:5 (1080 x 1350 scaled down to 432 x 540 for clean editing) */
-        .ig-slide-canvas {
+        /* Exact 4:5 Ratio (432px x 540px = 0.4x of 1080px x 1350px) */
+        .ig-slide {
             width: 432px;
             height: 540px;
-            padding: 44px 40px;
+            padding: 46px 44px; /* ~10.2% horizontal padding untuk ruang napas luas */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -317,809 +349,1032 @@
             user-select: none;
         }
 
-        /* Themes for Slide */
-        .theme-samsung-light {
-            background-color: #FFFFFF;
-            color: #121212;
+        /* Eye-Friendly Color Palettes */
+        .palette-paper-ivory {
+            background-color: #FAFAFA;
+            color: #1E293B;
         }
-        .theme-samsung-light .slide-meta { color: #8E8E93; }
-        .theme-samsung-light .slide-divider { background-color: #E5E5EA; }
-        .theme-samsung-light strong { color: #000000; font-weight: 700; }
+        .palette-paper-ivory .slide-meta { color: #64748B; }
+        .palette-paper-ivory .slide-line { background-color: #E2E8F0; }
+        .palette-paper-ivory strong { color: #0F172A; }
 
-        .theme-samsung-cream {
-            background-color: #F7F6F2;
-            color: #1A1A1A;
+        .palette-warm-cream {
+            background-color: #F8F7F4;
+            color: #1E293B;
         }
-        .theme-samsung-cream .slide-meta { color: #8A8880; }
-        .theme-samsung-cream .slide-divider { background-color: #E2E0D8; }
-        .theme-samsung-cream strong { color: #000000; font-weight: 700; }
+        .palette-warm-cream .slide-meta { color: #78716C; }
+        .palette-warm-cream .slide-line { background-color: #E7E5E4; }
+        .palette-warm-cream strong { color: #0C0A09; }
 
-        .theme-samsung-dark {
-            background-color: #111111;
-            color: #E5E5EA;
+        .palette-soft-sage {
+            background-color: #F2F5F3;
+            color: #1E293B;
         }
-        .theme-samsung-dark .slide-meta { color: #6E6E73; }
-        .theme-samsung-dark .slide-divider { background-color: #2C2C2E; }
-        .theme-samsung-dark strong { color: #FFFFFF; font-weight: 700; }
+        .palette-soft-sage .slide-meta { color: #5C6B63; }
+        .palette-soft-sage .slide-line { background-color: #DCE3DF; }
+        .palette-soft-sage strong { color: #0F172A; }
 
-        .theme-samsung-navy {
-            background-color: #1428A0; /* Samsung Classic Blue */
-            color: #E8ECFF;
+        .palette-charcoal-night {
+            background-color: #16181D;
+            color: #E2E8F0;
         }
-        .theme-samsung-navy .slide-meta { color: #8FA2FF; }
-        .theme-samsung-navy .slide-divider { background-color: rgba(255,255,255,0.2); }
-        .theme-samsung-navy strong { color: #FFFFFF; font-weight: 700; }
+        .palette-charcoal-night .slide-meta { color: #94A3B8; }
+        .palette-charcoal-night .slide-line { background-color: #292D36; }
+        .palette-charcoal-night strong { color: #FFFFFF; }
 
-        /* Slide Internal Layout */
-        .slide-top-bar {
+        /* Typography Presets */
+        /* 1. Editorial Modern: Lora Serif Headline + Inter Sans Body */
+        .font-preset-editorial .slide-headline {
+            font-family: 'Lora', Georgia, serif;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            line-height: 1.24;
+        }
+        .font-preset-editorial .slide-body {
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            line-height: 1.65;
+            letter-spacing: -0.008em;
+        }
+        .font-preset-editorial .slide-body strong {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+        }
+
+        /* 2. Clean Minimalist: Plus Jakarta Sans */
+        .font-preset-clean .slide-headline {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            line-height: 1.25;
+        }
+        .font-preset-clean .slide-body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 400;
+            line-height: 1.62;
+            letter-spacing: -0.005em;
+        }
+        .font-preset-clean .slide-body strong {
+            font-weight: 700;
+        }
+
+        /* 3. Humanist Warm: DM Sans */
+        .font-preset-humanist .slide-headline {
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.26;
+        }
+        .font-preset-humanist .slide-body {
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 400;
+            line-height: 1.64;
+            letter-spacing: 0;
+        }
+        .font-preset-humanist .slide-body strong {
+            font-weight: 700;
+        }
+
+        /* Slide Internal Structure */
+        .slide-top {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            font-family: var(--font-display);
-            font-size: 11px;
+            justify-content: space-between;
+            font-family: 'Inter', sans-serif;
+            font-size: 10.5px;
             font-weight: 600;
             letter-spacing: 0.08em;
             text-transform: uppercase;
         }
 
-        .slide-body-wrap {
+        .slide-center {
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 20px 0;
+            padding: 18px 0;
         }
 
         .slide-headline {
-            font-family: var(--font-display);
-            font-size: 26px;
-            font-weight: 700;
-            line-height: 1.25;
-            letter-spacing: -0.025em;
+            font-size: 25px;
             margin-bottom: 16px;
             white-space: pre-wrap;
+            word-break: break-word;
         }
 
-        .slide-paragraph {
-            font-family: var(--font-body);
-            font-size: 16px;
-            font-weight: 400;
-            line-height: 1.65;
-            letter-spacing: -0.01em;
+        .slide-body {
+            font-size: 15.5px;
             white-space: pre-wrap;
+            word-break: break-word;
         }
 
-        .slide-paragraph strong,
-        .slide-headline strong {
-            font-weight: 700;
-        }
-
-        .slide-bottom-bar {
+        .slide-bottom {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 11px;
         }
 
-        .slide-divider {
+        .slide-line {
             width: 100%;
             height: 1px;
         }
 
-        .slide-footer-info {
+        .slide-footer {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            font-family: var(--font-display);
+            justify-content: space-between;
+            font-family: 'Inter', sans-serif;
             font-size: 11px;
             font-weight: 500;
-            letter-spacing: 0.02em;
         }
 
-        .canvas-hint {
+        .stage-caption {
             margin-top: 14px;
             font-size: 12px;
-            color: var(--text-secondary);
+            color: var(--ui-muted);
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
-        /* Right Sidebar: Editor & Settings */
-        .sidebar-editor {
-            width: 360px;
-            background: var(--bg-panel);
-            border-left: 1px solid var(--border-color);
+        /* Right Column: Editor & Styling Controls */
+        .editor-panel {
+            padding: 18px;
             display: flex;
             flex-direction: column;
+            gap: 16px;
+            position: sticky;
+            top: 76px;
+            max-height: calc(100vh - 96px);
             overflow-y: auto;
-            flex-shrink: 0;
         }
 
-        .editor-section {
-            padding: 18px 20px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .editor-label {
+        .control-block {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 8px;
+            flex-direction: column;
+            gap: 7px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #F1F5F9;
         }
 
-        .editor-sublabel {
+        .control-block:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .field-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--ui-text);
+        }
+
+        .field-hint {
             font-size: 11px;
             font-weight: 400;
-            color: var(--text-secondary);
+            color: var(--ui-muted);
         }
 
         input[type="text"],
         textarea {
             width: 100%;
-            font-family: var(--font-body);
-            font-size: 14px;
-            color: var(--text-primary);
-            background: #F9F9FB;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 10px 12px;
-            transition: border-color 0.15s, background 0.15s;
-            resize: vertical;
+            font-family: var(--ui-font);
+            font-size: 13.5px;
+            color: var(--ui-text);
+            background: var(--ui-subtle);
+            border: 1px solid var(--ui-border);
+            border-radius: 10px;
+            padding: 9px 12px;
+            outline: none;
+            transition: border-color 0.15s, background-color 0.15s;
         }
 
         input[type="text"]:focus,
         textarea:focus {
-            outline: none;
-            border-color: var(--accent);
             background: #FFFFFF;
+            border-color: var(--ui-primary);
         }
 
         textarea {
-            min-height: 150px;
+            min-height: 145px;
             line-height: 1.55;
+            resize: vertical;
         }
 
-        .format-tip {
-            margin-top: 8px;
-            font-size: 11.5px;
-            color: var(--text-secondary);
-            background: #F2F2F7;
+        .tip-box {
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 9px;
             padding: 8px 10px;
-            border-radius: 6px;
-            line-height: 1.4;
+            font-size: 11.5px;
+            color: var(--ui-muted);
+            line-height: 1.45;
         }
 
-        .format-tip code {
-            font-family: monospace;
+        .tip-box code {
             background: #FFFFFF;
+            border: 1px solid #E2E8F0;
             padding: 1px 5px;
             border-radius: 4px;
             font-weight: 700;
-            color: var(--text-primary);
+            color: var(--ui-text);
         }
 
-        /* Theme Selector */
-        .theme-grid {
+        /* Font Switcher Cards */
+        .font-options-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 7px;
+        }
+
+        .font-choice-btn {
+            border: 1.5px solid var(--ui-border);
+            border-radius: 10px;
+            padding: 9px 6px;
+            background: #FFFFFF;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .font-choice-btn:hover {
+            border-color: #94A3B8;
+        }
+
+        .font-choice-btn.active {
+            border-color: var(--ui-primary);
+            background: #F8FAFC;
+        }
+
+        .font-choice-sample {
+            display: block;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--ui-text);
+            margin-bottom: 2px;
+        }
+
+        .font-choice-name {
+            display: block;
+            font-size: 10.5px;
+            font-weight: 600;
+            color: var(--ui-muted);
+        }
+
+        .font-choice-btn.active .font-choice-name {
+            color: var(--ui-primary);
+        }
+
+        /* Color Palette Grid */
+        .palette-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
+            gap: 7px;
         }
 
-        .theme-option {
-            border: 1.5px solid var(--border-color);
-            border-radius: 8px;
+        .palette-btn {
+            border: 1.5px solid var(--ui-border);
+            border-radius: 10px;
             padding: 8px 4px;
+            background: #FFFFFF;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 6px;
-            background: #FFFFFF;
-            font-size: 11px;
-            font-weight: 500;
-            color: var(--text-secondary);
-        }
-
-        .theme-option.active {
-            border-color: var(--accent);
-            color: var(--text-primary);
+            gap: 5px;
+            cursor: pointer;
+            font-size: 10.5px;
             font-weight: 600;
+            color: var(--ui-muted);
         }
 
-        .theme-swatch {
-            width: 24px;
-            height: 24px;
+        .palette-btn.active {
+            border-color: var(--ui-primary);
+            color: var(--ui-primary);
+            background: #F8FAFC;
+        }
+
+        .swatch-circle {
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
-            border: 1px solid rgba(0,0,0,0.12);
+            border: 1px solid rgba(15, 23, 42, 0.15);
         }
 
-        /* Alignment & Font Size Controls */
-        .control-row {
+        /* Segmented Controls */
+        .seg-row {
             display: flex;
             gap: 8px;
-            margin-top: 12px;
+            margin-top: 4px;
         }
 
-        .segmented-control {
+        .seg-group {
+            flex: 1;
             display: flex;
-            background: #F2F2F7;
+            background: #F1F5F9;
             padding: 3px;
-            border-radius: 8px;
-            flex: 1;
+            border-radius: 9px;
         }
 
-        .seg-btn {
+        .seg-item {
             flex: 1;
-            padding: 6px;
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--text-secondary);
+            border: none;
             background: transparent;
-            border-radius: 6px;
+            padding: 6px 4px;
+            border-radius: 7px;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--ui-muted);
+            cursor: pointer;
         }
 
-        .seg-btn.active {
+        .seg-item.active {
             background: #FFFFFF;
-            color: var(--text-primary);
+            color: var(--ui-text);
             box-shadow: 0 1px 3px rgba(0,0,0,0.08);
         }
 
-        /* Modal Batch Input */
-        .modal-backdrop {
+        /* Modals */
+        .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.45);
-            backdrop-filter: blur(3px);
+            background: rgba(15, 23, 42, 0.48);
+            backdrop-filter: blur(4px);
+            z-index: 50;
             display: none;
             align-items: center;
             justify-content: center;
-            z-index: 100;
+            padding: 16px;
         }
 
-        .modal-backdrop.open {
+        .modal-overlay.open {
             display: flex;
         }
 
-        .modal-card {
+        .modal-box {
             background: #FFFFFF;
-            width: 540px;
-            max-width: 92vw;
-            border-radius: 14px;
-            padding: 24px;
-            box-shadow: 0 24px 60px rgba(0,0,0,0.2);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 520px;
+            padding: 22px;
+            box-shadow: 0 24px 48px rgba(15, 23, 42, 0.2);
         }
 
-        .modal-header {
+        .modal-top {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            justify-content: space-between;
+            margin-bottom: 10px;
         }
 
-        .modal-title {
-            font-family: var(--font-display);
-            font-size: 18px;
+        .modal-top h3 {
+            font-size: 16px;
             font-weight: 700;
         }
 
         .modal-desc {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-bottom: 14px;
+            font-size: 12.5px;
+            color: var(--ui-muted);
             line-height: 1.5;
+            margin-bottom: 12px;
         }
 
-        .modal-footer {
+        .modal-actions {
             display: flex;
             justify-content: flex-end;
             gap: 8px;
-            margin-top: 16px;
+            margin-top: 14px;
+            flex-wrap: wrap;
         }
 
-        /* Hidden file input */
-        #importFileInput {
-            display: none;
+        /* Toast */
+        .toast-msg {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #0F172A;
+            color: #FFFFFF;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-size: 12.5px;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            z-index: 60;
+            transform: translateY(80px);
+            opacity: 0;
+            transition: all 0.25s ease;
         }
 
-        /* Responsive */
-        @media (max-width: 1024px) {
-            body { height: auto; overflow: auto; }
-            .workspace { flex-direction: column; overflow: visible; }
-            .sidebar-slides, .sidebar-editor { width: 100%; border: none; border-bottom: 1px solid var(--border-color); }
-            .slides-list { flex-direction: row; overflow-x: auto; }
-            .slide-thumb { min-width: 160px; }
+        .toast-msg.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Responsive Layout */
+        @media (max-width: 1120px) {
+            .studio-layout {
+                grid-template-columns: 1fr;
+            }
+            .slides-panel, .editor-panel {
+                position: static;
+                max-height: none;
+            }
+            .slides-scroll {
+                flex-direction: row;
+                overflow-x: auto;
+                padding-bottom: 4px;
+            }
+            .thumb-card {
+                min-width: 175px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ig-slide {
+                width: 340px;
+                height: 425px;
+                padding: 34px 32px;
+            }
         }
     </style>
 </head>
 <body>
 
     <!-- Top Navigation Bar -->
-    <header>
-        <div class="brand">
-            <i class="fa-solid fa-layer-group"></i>
-            <span>Storytelling Studio</span>
-            <span class="brand-badge">IG 4:5 • Samsung Minimal</span>
-        </div>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div class="brand-wrap">
+                <div class="brand-logo">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="3"></rect>
+                        <line x1="8" y1="9" x2="16" y2="9"></line>
+                        <line x1="8" y1="13" x2="14" y2="13"></line>
+                        <line x1="8" y1="17" x2="11" y2="17"></line>
+                    </svg>
+                </div>
+                <div>
+                    <div class="brand-title">Storytelling Studio 4:5</div>
+                    <div class="brand-sub">
+                        <span>Instagram Carousel Minimalis</span>
+                        <span class="save-pill">
+                            <span class="save-dot"></span>
+                            <span id="saveStatusText">Tersimpan otomatis</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
 
-        <div class="status-save" id="saveStatus">
-            <span class="status-dot"></span>
-            <span id="saveStatusText">Tersimpan otomatis di browser</span>
-        </div>
-
-        <div class="header-actions">
-            <button class="btn btn-secondary" onclick="openBatchModal()" title="Tulis banyak slide sekaligus">
-                <i class="fa-solid fa-wand-magic-sparkles"></i> Buat Banyak Slide
-            </button>
-            <button class="btn btn-secondary" onclick="exportProjectJSON()" title="Simpan file proyek untuk dipindah perangkat">
-                <i class="fa-solid fa-floppy-disk"></i> Simpan File
-            </button>
-            <button class="btn btn-secondary" onclick="document.getElementById('importFileInput').click()" title="Buka file proyek sebelumnya">
-                <i class="fa-solid fa-folder-open"></i> Buka
-            </button>
-            <input type="file" id="importFileInput" accept=".json" onchange="importProjectJSON(event)">
-            <button class="btn btn-primary" onclick="downloadCurrentSlide()" id="btnDownloadSingle">
-                <i class="fa-solid fa-download"></i> Unduh Slide Ini
-            </button>
-            <button class="btn btn-primary" onclick="downloadAllSlidesZIP()" id="btnDownloadAll">
-                <i class="fa-solid fa-file-zipper"></i> Unduh Semua
-            </button>
+            <div class="header-actions">
+                <button class="btn btn-soft" onclick="openBatchModal()" title="Tulis naskah panjang untuk banyak slide sekaligus">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                    <span>Buat Banyak Slide</span>
+                </button>
+                <button class="btn btn-secondary" onclick="exportProjectJSON()" title="Simpan draf proyek (.json) untuk dilanjutkan di perangkat lain">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                    <span>Simpan Draf</span>
+                </button>
+                <button class="btn btn-secondary" onclick="document.getElementById('importJsonInput').click()" title="Muat file draf proyek (.json)">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                    <span>Buka Draf</span>
+                </button>
+                <input type="file" id="importJsonInput" accept=".json" style="display:none" onchange="importProjectJSON(event)">
+                <button class="btn btn-primary" onclick="downloadCurrentSlidePNG()" id="btnDownloadCurrent">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    <span>Unduh Slide Ini (PNG)</span>
+                </button>
+                <button class="btn btn-primary" onclick="downloadAllSlidesPNG()" id="btnDownloadAll">
+                    <span>Unduh Semua (<span id="btnAllCount">2</span>)</span>
+                </button>
+            </div>
         </div>
     </header>
 
-    <!-- Main Workspace -->
-    <div class="workspace">
-        
-        <!-- Left Sidebar: Slide Deck Navigator -->
-        <aside class="sidebar-slides">
-            <div class="sidebar-header">
-                <span class="sidebar-title">Daftar Slide (<span id="slideCount">1</span>)</span>
-                <button class="btn-danger-ghost" onclick="resetProject()" title="Mulai proyek baru">
-                    <i class="fa-solid fa-rotate-right"></i>
-                </button>
+    <!-- Main 3-Column Studio Workspace -->
+    <main class="studio-layout">
+
+        <!-- Left Column: Slides List -->
+        <aside class="panel-card slides-panel">
+            <div class="panel-head">
+                <span class="panel-title">Slide (<span id="slideCountLabel">2</span>)</span>
+                <button class="btn btn-danger-soft btn-sm" onclick="openResetConfirm()" title="Kosongkan dan mulai baru">Reset</button>
             </div>
 
-            <div class="slides-list" id="slidesList">
-                <!-- Thumbnails rendered via JS -->
+            <div class="slides-scroll" id="slidesListContainer">
+                <!-- Rendered via JS -->
             </div>
 
-            <div class="sidebar-footer">
-                <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="addNewSlide()">
-                    <i class="fa-solid fa-plus"></i> Tambah Slide Baru
-                </button>
-            </div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="addNewSlide()">
+                + Tambah Slide Baru
+            </button>
         </aside>
 
-        <!-- Center Stage: Live 4:5 Instagram Canvas -->
-        <main class="canvas-stage">
-            <div class="canvas-wrapper">
-                <div id="igCanvas" class="ig-slide-canvas theme-samsung-light">
-                    <!-- Top Header inside Slide -->
-                    <div class="slide-top-bar slide-meta">
-                        <span id="canvasSeriesTag">STORYTELLING</span>
-                        <span id="canvasPageIndicator">01 / 01</span>
+        <!-- Center Column: Live 4:5 Slide Stage -->
+        <section class="stage-area">
+            <div class="canvas-frame">
+                <div id="liveSlidePreview" class="ig-slide palette-paper-ivory font-preset-editorial">
+                    <!-- Top Meta Header -->
+                    <div class="slide-top slide-meta">
+                        <span id="previewSeries">CATATAN MINIMALIS</span>
+                        <span id="previewPageNum">01 / 02</span>
                     </div>
 
-                    <!-- Main Content inside Slide -->
-                    <div class="slide-body-wrap" id="canvasBodyWrap">
-                        <div class="slide-headline" id="canvasHeadline"></div>
-                        <div class="slide-paragraph" id="canvasBody"></div>
+                    <!-- Center Content Area -->
+                    <div class="slide-center" id="previewCenterWrap">
+                        <div class="slide-headline" id="previewHeadline"></div>
+                        <div class="slide-body" id="previewBody"></div>
                     </div>
 
-                    <!-- Bottom Footer inside Slide -->
-                    <div class="slide-bottom-bar">
-                        <div class="slide-divider"></div>
-                        <div class="slide-footer-info slide-meta">
-                            <span id="canvasAuthor">@username</span>
-                            <span id="canvasSwipeHint">Geser <i class="fa-solid fa-arrow-right" style="font-size: 10px; margin-left: 3px;"></i></span>
+                    <!-- Bottom Footer -->
+                    <div class="slide-bottom">
+                        <div class="slide-line"></div>
+                        <div class="slide-footer slide-meta">
+                            <span id="previewAuthor">@username</span>
+                            <span id="previewSwipe">Geser &rarr;</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="canvas-hint">
-                <span><i class="fa-regular fa-rectangle-portrait"></i> Rasio 4:5 (1080 × 1350 px saat diunduh)</span>
-                <span>•</span>
-                <span>Otomatis tersimpan jika tab ditutup</span>
+            <div class="stage-caption">
+                <span>Ukuran Ekspor: <strong>1080 &times; 1350 px (4:5 HD)</strong></span>
+                <span>&bull;</span>
+                <span>Otomatis tersimpan untuk dilanjutkan besok</span>
             </div>
-        </main>
+        </section>
 
-        <!-- Right Sidebar: Editor & Styling -->
-        <aside class="sidebar-editor">
-            
-            <!-- Text Content Editor -->
-            <div class="editor-section">
-                <div class="editor-label">
-                    <span>Judul Utama (Opsional)</span>
-                    <span class="editor-sublabel">Gunakan *teks* untuk bold</span>
+        <!-- Right Column: Text & Typography Editor -->
+        <aside class="panel-card editor-panel">
+
+            <!-- Slide Content Inputs -->
+            <div class="control-block">
+                <div class="field-label">
+                    <span>Judul / Hook Slide</span>
+                    <span class="field-hint">Opsional &bull; *tebal*</span>
                 </div>
-                <input type="text" id="inputHeadline" placeholder="Contoh: *5 Pelajaran* Hari Ini..." oninput="updateCurrentSlide()">
+                <input type="text" id="inputHeadline" placeholder="Tulis judul singkat yang memikat..." oninput="handleSlideTextChange()">
 
-                <div class="editor-label" style="margin-top: 16px;">
+                <div class="field-label" style="margin-top: 8px;">
                     <span>Isi Cerita / Storytelling</span>
-                    <span class="editor-sublabel" id="charCount">0 karakter</span>
+                    <span class="field-hint" id="charCounter">0 karakter</span>
                 </div>
-                <textarea id="inputBody" placeholder="Tulis cerita Anda di sini. Apit kata dengan tanda bintang seperti *ini* agar otomatis menjadi tebal..." oninput="updateCurrentSlide()"></textarea>
+                <textarea id="inputBody" placeholder="Tulis isi cerita Anda di sini. Apit kata penting dengan tanda bintang seperti *ini* agar otomatis cetak tebal..." oninput="handleSlideTextChange()"></textarea>
 
-                <div class="format-tip">
-                    <i class="fa-solid fa-circle-info"></i> Ketik <code>*kata penting*</code> akan otomatis tampil <strong>kata penting</strong> di dalam slide.
+                <div class="tip-box">
+                    Gunakan tanda bintang tunggal <code>*kata penting*</code> untuk membuat tulisan otomatis menjadi <strong>tebal (bold)</strong> di dalam slide.
                 </div>
             </div>
 
-            <!-- Theme & Typography Settings -->
-            <div class="editor-section">
-                <div class="editor-label">
-                    <span>Tema Warna Minimalis</span>
-                    <span class="editor-sublabel">Terapkan ke semua</span>
+            <!-- Typography Pairing Selector -->
+            <div class="control-block">
+                <div class="field-label">
+                    <span>Gaya Tipografi Minimalis</span>
+                    <span class="field-hint">Nyaman dibaca di HP</span>
                 </div>
-                <div class="theme-grid">
-                    <button class="theme-option active" data-theme="theme-samsung-light" onclick="setGlobalTheme('theme-samsung-light')">
-                        <span class="theme-swatch" style="background: #FFFFFF;"></span>
-                        <span>Pure White</span>
+                <div class="font-options-grid">
+                    <button type="button" class="font-choice-btn active" data-font="font-preset-editorial" onclick="setFontPreset('font-preset-editorial')">
+                        <span class="font-choice-sample" style="font-family: 'Lora', serif;">Aa</span>
+                        <span class="font-choice-name">Editorial</span>
                     </button>
-                    <button class="theme-option" data-theme="theme-samsung-cream" onclick="setGlobalTheme('theme-samsung-cream')">
-                        <span class="theme-swatch" style="background: #F7F6F2;"></span>
-                        <span>Warm Paper</span>
+                    <button type="button" class="font-choice-btn" data-font="font-preset-clean" onclick="setFontPreset('font-preset-clean')">
+                        <span class="font-choice-sample" style="font-family: 'Plus Jakarta Sans', sans-serif;">Aa</span>
+                        <span class="font-choice-name">Clean</span>
                     </button>
-                    <button class="theme-option" data-theme="theme-samsung-dark" onclick="setGlobalTheme('theme-samsung-dark')">
-                        <span class="theme-swatch" style="background: #111111;"></span>
-                        <span>OLED Dark</span>
+                    <button type="button" class="font-choice-btn" data-font="font-preset-humanist" onclick="setFontPreset('font-preset-humanist')">
+                        <span class="font-choice-sample" style="font-family: 'DM Sans', sans-serif;">Aa</span>
+                        <span class="font-choice-name">Humanist</span>
                     </button>
-                    <button class="theme-option" data-theme="theme-samsung-navy" onclick="setGlobalTheme('theme-samsung-navy')">
-                        <span class="theme-swatch" style="background: #1428A0;"></span>
-                        <span>Classic Blue</span>
+                </div>
+                <div class="field-hint" id="fontDescHint" style="margin-top: 2px;">
+                    Judul <strong>Lora</strong> (Serif klasik-modern) + Isi <strong>Inter</strong> (Sans-serif bersih).
+                </div>
+            </div>
+
+            <!-- Eye-Friendly Color Palette -->
+            <div class="control-block">
+                <div class="field-label">
+                    <span>Warna Latar Ramah Mata</span>
+                </div>
+                <div class="palette-grid">
+                    <button type="button" class="palette-btn active" data-palette="palette-paper-ivory" onclick="setPalette('palette-paper-ivory')">
+                        <span class="swatch-circle" style="background: #FAFAFA;"></span>
+                        <span>Ivory</span>
+                    </button>
+                    <button type="button" class="palette-btn" data-palette="palette-warm-cream" onclick="setPalette('palette-warm-cream')">
+                        <span class="swatch-circle" style="background: #F8F7F4;"></span>
+                        <span>Warm Cream</span>
+                    </button>
+                    <button type="button" class="palette-btn" data-palette="palette-soft-sage" onclick="setPalette('palette-soft-sage')">
+                        <span class="swatch-circle" style="background: #F2F5F3;"></span>
+                        <span>Soft Sage</span>
+                    </button>
+                    <button type="button" class="palette-btn" data-palette="palette-charcoal-night" onclick="setPalette('palette-charcoal-night')">
+                        <span class="swatch-circle" style="background: #16181D;"></span>
+                        <span>Charcoal</span>
                     </button>
                 </div>
 
-                <div class="control-row">
-                    <div class="segmented-control">
-                        <button class="seg-btn active" id="alignLeftBtn" onclick="setAlignment('left')">
-                            <i class="fa-solid fa-align-left"></i> Rata Kiri
-                        </button>
-                        <button class="seg-btn" id="alignCenterBtn" onclick="setAlignment('center')">
-                            <i class="fa-solid fa-align-center"></i> Tengah
-                        </button>
+                <div class="seg-row">
+                    <div class="seg-group">
+                        <button type="button" class="seg-item active" id="alignLeftBtn" onclick="setAlign('left')">Rata Kiri</button>
+                        <button type="button" class="seg-item" id="alignCenterBtn" onclick="setAlign('center')">Rata Tengah</button>
                     </div>
-                    <div class="segmented-control">
-                        <button class="seg-btn" id="sizeSmBtn" onclick="setFontSize('small')">Kecil</button>
-                        <button class="seg-btn active" id="sizeMdBtn" onclick="setFontSize('medium')">Sedang</button>
-                        <button class="seg-btn" id="sizeLgBtn" onclick="setFontSize('large')">Besar</button>
+                    <div class="seg-group">
+                        <button type="button" class="seg-item" id="sizeSmBtn" onclick="setTextSize('small')">Kecil</button>
+                        <button type="button" class="seg-item active" id="sizeMdBtn" onclick="setTextSize('medium')">Sedang</button>
+                        <button type="button" class="seg-item" id="sizeLgBtn" onclick="setTextSize('large')">Besar</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Global Identity (Header & Footer) -->
-            <div class="editor-section" style="border-bottom: none;">
-                <div class="editor-label">
-                    <span>Identitas Series (Semua Slide)</span>
+            <!-- Series & Author Identity -->
+            <div class="control-block">
+                <div class="field-label">
+                    <span>Identitas Series & Akun</span>
                 </div>
-                <div style="display: flex; gap: 8px;">
-                    <input type="text" id="inputSeries" placeholder="Tag Series (misal: CATATAN)" oninput="updateGlobalMeta()">
-                    <input type="text" id="inputAuthor" placeholder="@akunanda" oninput="updateGlobalMeta()">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <input type="text" id="inputSeries" placeholder="Judul Series" oninput="handleMetaChange()">
+                    <input type="text" id="inputAuthor" placeholder="@akuninstagram" oninput="handleMetaChange()">
                 </div>
             </div>
 
         </aside>
-    </div>
+
+    </main>
 
     <!-- Modal: Buat Banyak Slide Sekaligus -->
-    <div class="modal-backdrop" id="batchModal">
-        <div class="modal-card">
-            <div class="modal-header">
-                <h3 class="modal-title">Buat Banyak Slide Sekaligus</h3>
-                <button class="thumb-btn" onclick="closeBatchModal()"><i class="fa-solid fa-xmark"></i></button>
+    <div class="modal-overlay" id="batchModal" onclick="if(event.target===this) closeBatchModal()">
+        <div class="modal-box">
+            <div class="modal-top">
+                <h3>Buat Banyak Slide Sekaligus</h3>
+                <button class="mini-btn" onclick="closeBatchModal()">✕</button>
             </div>
             <p class="modal-desc">
-                Tulis seluruh naskah storytelling Anda di bawah ini. Pisahkan antar-slide menggunakan tanda tiga garis mendatar (<code>---</code>) pada baris baru. Baris pertama tiap bagian otomatis menjadi judul jika pendek, dan gunakan <code>*teks*</code> untuk huruf tebal.
+                Tempel seluruh naskah storytelling Anda di bawah ini. Pisahkan setiap slide dengan tanda <code>---</code> pada baris baru. Baris pertama tiap bagian (jika singkat) otomatis menjadi judul slide, dan teks di antara <code>*...*</code> akan otomatis cetak tebal.
             </p>
-            <textarea id="batchTextarea" style="min-height: 220px;" placeholder="*Mulai dari hal kecil*
-Konsistensi bukan tentang melakukan hal besar sekali waktu, melainkan *langkah sederhana* yang diulang setiap hari.
+            <textarea id="batchInputArea" style="min-height: 210px;" placeholder="Seni Bercerita yang Sederhana
+Terkadang pesan paling kuat lahir dari tampilan yang *bersih*, tenang, dan *mudah dibaca* di layar ponsel.
 ---
-*Jangan takut berhenti sejenak*
-Jika hari ini terasa berat, simpan tulisanmu dan *lanjutkan esok hari* dengan pikiran yang lebih jernih.
+Simpan Hari Ini, Lanjutkan Besok
+Semua tulisan Anda otomatis tersimpan di browser ini. Anda bisa menutup halaman kapan saja dan *melanjutkannya esok hari*.
 ---
-*Kesimpulan*
-Simpan ide terbaikmu dalam bentuk cerita yang bermakna."></textarea>
-            <div class="modal-footer">
+Fokus pada Satu Pesan
+Setiap slide cukup memuat *satu gagasan utama* agar pembaca nyaman menyimak sampai slide terakhir."></textarea>
+            <div class="modal-actions">
                 <button class="btn btn-secondary" onclick="closeBatchModal()">Batal</button>
-                <button class="btn btn-secondary" onclick="processBatchSlides(true)">Tambahkan ke Slide Ada</button>
-                <button class="btn btn-primary" onclick="processBatchSlides(false)">Ganti Semua Slide</button>
+                <button class="btn btn-soft" onclick="applyBatchSlides(true)">Tambahkan ke Slide Ada</button>
+                <button class="btn btn-primary" onclick="applyBatchSlides(false)">Ganti Semua Slide</button>
             </div>
         </div>
     </div>
 
-    <script>
-        // State Management
-        const STORAGE_KEY = 'ig_storytelling_samsung_4x5_v1';
+    <!-- Modal: Custom Confirm Dialog -->
+    <div class="modal-overlay" id="confirmModal" onclick="if(event.target===this) closeConfirmModal()">
+        <div class="modal-box" style="max-width: 390px;">
+            <div class="modal-top">
+                <h3 id="confirmTitle">Konfirmasi</h3>
+                <button class="mini-btn" onclick="closeConfirmModal()">✕</button>
+            </div>
+            <p class="modal-desc" id="confirmDesc">Apakah Anda yakin?</p>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeConfirmModal()">Batal</button>
+                <button class="btn btn-danger-soft" id="confirmYesBtn">Ya, Reset</button>
+            </div>
+        </div>
+    </div>
 
-        let projectState = {
-            theme: 'theme-samsung-light',
+    <!-- Toast Notification -->
+    <div class="toast-msg" id="toastEl">Tersimpan</div>
+
+    <script>
+        const STORAGE_KEY = 'ig_storytelling_editorial_4x5_v2';
+
+        const PALETTE_CONFIG = {
+            'palette-paper-ivory': {
+                bg: '#FAFAFA',
+                text: '#1E293B',
+                strong: '#0F172A',
+                meta: '#64748B',
+                line: '#E2E8F0'
+            },
+            'palette-warm-cream': {
+                bg: '#F8F7F4',
+                text: '#1E293B',
+                strong: '#0C0A09',
+                meta: '#78716C',
+                line: '#E7E5E4'
+            },
+            'palette-soft-sage': {
+                bg: '#F2F5F3',
+                text: '#1E293B',
+                strong: '#0F172A',
+                meta: '#5C6B63',
+                line: '#DCE3DF'
+            },
+            'palette-charcoal-night': {
+                bg: '#16181D',
+                text: '#E2E8F0',
+                strong: '#FFFFFF',
+                meta: '#94A3B8',
+                line: '#292D36'
+            }
+        };
+
+        const FONT_CONFIG = {
+            'font-preset-editorial': {
+                headlineFamily: '"Lora", Georgia, serif',
+                bodyFamily: '"Inter", sans-serif',
+                desc: 'Judul <strong>Lora</strong> (Serif klasik-modern) + Isi <strong>Inter</strong> (Sans-serif bersih).'
+            },
+            'font-preset-clean': {
+                headlineFamily: '"Plus Jakarta Sans", sans-serif',
+                bodyFamily: '"Plus Jakarta Sans", sans-serif',
+                desc: '<strong>Plus Jakarta Sans</strong> seragam — geometri halus, modern, dan rapi.'
+            },
+            'font-preset-humanist': {
+                headlineFamily: '"DM Sans", sans-serif',
+                bodyFamily: '"DM Sans", sans-serif',
+                desc: '<strong>DM Sans</strong> — lembut, hangat, dan nyaman untuk cerita personal.'
+            }
+        };
+
+        let state = {
+            fontPreset: 'font-preset-editorial',
+            palette: 'palette-paper-ivory',
             align: 'left',
-            fontSize: 'medium',
-            seriesTag: 'CATATAN HARIAN',
+            textSize: 'medium',
+            seriesTag: 'CATATAN MINIMALIS',
             author: '@ceritakita',
             currentIndex: 0,
             slides: [
                 {
-                    headline: 'Seni Bercerita yang *Sederhana*',
-                    body: 'Terkadang, pesan paling kuat justru lahir dari tampilan yang *bersih* dan tanpa gangguan.\n\nApit kata dengan tanda bintang seperti *ini* untuk memberi penekanan otomatis.'
+                    headline: 'Mengapa Tulisan yang Sederhana Lebih Mudah Diingat',
+                    body: 'Di tengah linimasa yang penuh warna mencolok, tampilan yang *tenang dan rapi* justru membuat orang berhenti untuk membaca.\n\nApit kata kunci dengan tanda bintang seperti *ini* agar otomatis cetak tebal.'
                 },
                 {
-                    headline: 'Bisa Disimpan & *Dilanjutkan Besok*',
-                    body: 'Semua tulisan Anda otomatis tersimpan di browser ini.\n\nTutup halaman kapan saja, dan lanjutkan kembali esok hari tanpa kehilangan satu kata pun.'
+                    headline: 'Simpan Drafmu, Lanjutkan Esok Hari',
+                    body: 'Setiap perubahan teks otomatis tersimpan di browser ini.\n\nAnda bebas menutup tab sekarang dan *melanjutkan cerita esok hari* tanpa kehilangan satu kalimat pun.'
                 }
             ]
         };
 
-        // Initialization
         window.addEventListener('DOMContentLoaded', () => {
-            loadFromLocalStorage();
-            syncGlobalControls();
+            loadState();
+            syncControlUI();
             renderAll();
         });
 
-        // Parse *text* into <strong>text</strong> safely
-        function parseBoldMarkdown(rawText) {
-            if (!rawText) return '';
-            // Escape HTML tags first to prevent XSS
-            const escaped = rawText
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;");
-            // Replace *text* with <strong>text</strong>
-            return escaped.replace(/\*([^\*\n]+)\*/g, '<strong>$1</strong>');
-        }
-
-        // Save to LocalStorage automatically
-        function saveToLocalStorage() {
+        function loadState() {
             try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(projectState));
-                const now = new Date();
-                const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-                document.getElementById('saveStatusText').innerText = `Tersimpan otomatis (${timeStr})`;
-            } catch (e) {
-                document.getElementById('saveStatusText').innerText = 'Gagal menyimpan otomatis';
-            }
-        }
-
-        function loadFromLocalStorage() {
-            const saved = localStorage.getItem(STORAGE_KEY);
-            if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
                     if (parsed && Array.isArray(parsed.slides) && parsed.slides.length > 0) {
-                        projectState = { ...projectState, ...parsed };
-                        if (projectState.currentIndex >= projectState.slides.length) {
-                            projectState.currentIndex = 0;
+                        state = { ...state, ...parsed };
+                        if (state.currentIndex >= state.slides.length) {
+                            state.currentIndex = 0;
                         }
                     }
-                } catch (e) {
-                    console.error('Error memuat data tersimpan:', e);
                 }
+            } catch (e) {
+                console.error('Gagal memuat state:', e);
             }
         }
 
-        // Sync inputs with global settings
-        function syncGlobalControls() {
-            document.getElementById('inputSeries').value = projectState.seriesTag || '';
-            document.getElementById('inputAuthor').value = projectState.author || '';
+        function saveState() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+                const now = new Date();
+                const hh = String(now.getHours()).padStart(2, '0');
+                const mm = String(now.getMinutes()).padStart(2, '0');
+                document.getElementById('saveStatusText').innerText = `Tersimpan (${hh}:${mm})`;
+            } catch (e) {
+                document.getElementById('saveStatusText').innerText = 'Gagal menyimpan';
+            }
+        }
 
-            // Theme active button
-            document.querySelectorAll('.theme-option').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.theme === projectState.theme);
+        function escapeHtml(text) {
+            if (!text) return '';
+            return String(text)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        function parseBoldToHtml(raw) {
+            if (!raw) return '';
+            const safe = escapeHtml(raw);
+            return safe.replace(/\*([^\*\n]+)\*/g, '<strong>$1</strong>');
+        }
+
+        function syncControlUI() {
+            document.getElementById('inputSeries').value = state.seriesTag || '';
+            document.getElementById('inputAuthor').value = state.author || '';
+
+            document.querySelectorAll('.font-choice-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.font === state.fontPreset);
+            });
+            const fontMeta = FONT_CONFIG[state.fontPreset] || FONT_CONFIG['font-preset-editorial'];
+            document.getElementById('fontDescHint').innerHTML = fontMeta.desc;
+
+            document.querySelectorAll('.palette-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.palette === state.palette);
             });
 
-            // Align buttons
-            document.getElementById('alignLeftBtn').classList.toggle('active', projectState.align === 'left');
-            document.getElementById('alignCenterBtn').classList.toggle('active', projectState.align === 'center');
+            document.getElementById('alignLeftBtn').classList.toggle('active', state.align === 'left');
+            document.getElementById('alignCenterBtn').classList.toggle('active', state.align === 'center');
 
-            // Font size buttons
-            document.getElementById('sizeSmBtn').classList.toggle('active', projectState.fontSize === 'small');
-            document.getElementById('sizeMdBtn').classList.toggle('active', projectState.fontSize === 'medium');
-            document.getElementById('sizeLgBtn').classList.toggle('active', projectState.fontSize === 'large');
+            document.getElementById('sizeSmBtn').classList.toggle('active', state.textSize === 'small');
+            document.getElementById('sizeMdBtn').classList.toggle('active', state.textSize === 'medium');
+            document.getElementById('sizeLgBtn').classList.toggle('active', state.textSize === 'large');
         }
 
-        // Render Sidebar Thumbnails & Active Canvas
         function renderAll() {
-            renderSidebar();
-            renderEditorInputs();
-            renderCanvas();
+            renderSlidesSidebar();
+            renderEditorFields();
+            renderLivePreview();
         }
 
-        function renderSidebar() {
-            const listEl = document.getElementById('slidesList');
-            document.getElementById('slideCount').innerText = projectState.slides.length;
-            listEl.innerHTML = '';
+        function renderSlidesSidebar() {
+            const container = document.getElementById('slidesListContainer');
+            const total = state.slides.length;
+            document.getElementById('slideCountLabel').innerText = total;
+            document.getElementById('btnAllCount').innerText = total;
+            container.innerHTML = '';
 
-            projectState.slides.forEach((slide, idx) => {
-                const isActive = idx === projectState.currentIndex;
-                const cleanPreview = (slide.headline || slide.body || '(Slide Kosong)').replace(/\*/g, '');
+            state.slides.forEach((slide, idx) => {
+                const isActive = idx === state.currentIndex;
+                const snippet = (slide.headline || slide.body || '(Slide Kosong)').replace(/\*/g, '');
 
-                const item = document.createElement('div');
-                item.className = `slide-thumb ${isActive ? 'active' : ''}`;
-                item.onclick = () => selectSlide(idx);
+                const card = document.createElement('div');
+                card.className = `thumb-card ${isActive ? 'active' : ''}`;
+                card.onclick = () => {
+                    state.currentIndex = idx;
+                    saveState();
+                    renderAll();
+                };
 
-                item.innerHTML = `
-                    <div class="thumb-top">
-                        <span class="thumb-num">SLIDE ${String(idx + 1).padStart(2, '0')}</span>
-                        <div class="thumb-actions" onclick="event.stopPropagation()">
-                            <button class="thumb-btn" onclick="moveSlide(${idx}, -1)" title="Geser ke atas" ${idx === 0 ? 'disabled style="opacity:0.3"' : ''}>
-                                <i class="fa-solid fa-arrow-up"></i>
-                            </button>
-                            <button class="thumb-btn" onclick="moveSlide(${idx}, 1)" title="Geser ke bawah" ${idx === projectState.slides.length - 1 ? 'disabled style="opacity:0.3"' : ''}>
-                                <i class="fa-solid fa-arrow-down"></i>
-                            </button>
-                            <button class="thumb-btn" onclick="duplicateSlide(${idx})" title="Duplikat slide">
-                                <i class="fa-regular fa-copy"></i>
-                            </button>
-                            <button class="thumb-btn del" onclick="deleteSlide(${idx})" title="Hapus slide">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
+                card.innerHTML = `
+                    <div class="thumb-header">
+                        <span class="thumb-badge">SLIDE ${String(idx + 1).padStart(2, '0')}</span>
+                        <div class="thumb-controls" onclick="event.stopPropagation()">
+                            <button type="button" class="mini-btn" onclick="moveSlide(${idx}, -1)" title="Geser Naik" ${idx === 0 ? 'disabled style="opacity:0.3"' : ''}>↑</button>
+                            <button type="button" class="mini-btn" onclick="moveSlide(${idx}, 1)" title="Geser Turun" ${idx === total - 1 ? 'disabled style="opacity:0.3"' : ''}>↓</button>
+                            <button type="button" class="mini-btn" onclick="duplicateSlide(${idx})" title="Duplikat">⧉</button>
+                            <button type="button" class="mini-btn del" onclick="deleteSlide(${idx})" title="Hapus">✕</button>
                         </div>
                     </div>
-                    <div class="thumb-preview-text">${cleanPreview}</div>
+                    <div class="thumb-snippet">${escapeHtml(snippet)}</div>
                 `;
-                listEl.appendChild(item);
+                container.appendChild(card);
             });
         }
 
-        function renderEditorInputs() {
-            const current = projectState.slides[projectState.currentIndex];
-            document.getElementById('inputHeadline').value = current.headline || '';
-            document.getElementById('inputBody').value = current.body || '';
-            document.getElementById('charCount').innerText = `${(current.body || '').length} karakter`;
+        function renderEditorFields() {
+            const cur = state.slides[state.currentIndex];
+            document.getElementById('inputHeadline').value = cur.headline || '';
+            document.getElementById('inputBody').value = cur.body || '';
+            document.getElementById('charCounter').innerText = `${(cur.body || '').length} karakter`;
         }
 
-        function renderCanvas() {
-            const canvas = document.getElementById('igCanvas');
-            const current = projectState.slides[projectState.currentIndex];
-            const total = projectState.slides.length;
-            const idx = projectState.currentIndex;
+        function renderLivePreview() {
+            const previewEl = document.getElementById('liveSlidePreview');
+            const cur = state.slides[state.currentIndex];
+            const total = state.slides.length;
+            const idx = state.currentIndex;
 
-            // Apply Theme
-            canvas.className = `ig-slide-canvas ${projectState.theme}`;
+            previewEl.className = `ig-slide ${state.palette} ${state.fontPreset}`;
 
-            // Top & Bottom Meta
-            document.getElementById('canvasSeriesTag').innerText = projectState.seriesTag || 'STORYTELLING';
-            document.getElementById('canvasPageIndicator').innerText = `${String(idx + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
-            document.getElementById('canvasAuthor').innerText = projectState.author || '';
+            document.getElementById('previewSeries').innerText = state.seriesTag || 'STORYTELLING';
+            document.getElementById('previewPageNum').innerText = `${String(idx + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+            document.getElementById('previewAuthor').innerText = state.author || '';
+            document.getElementById('previewSwipe').innerHTML = idx < total - 1 ? 'Geser &rarr;' : 'Simpan &amp; Bagikan';
 
-            const swipeHintEl = document.getElementById('canvasSwipeHint');
-            if (idx < total - 1) {
-                swipeHintEl.innerHTML = `Geser <i class="fa-solid fa-arrow-right" style="font-size: 10px; margin-left: 3px;"></i>`;
+            const centerWrap = document.getElementById('previewCenterWrap');
+            const headEl = document.getElementById('previewHeadline');
+            const bodyEl = document.getElementById('previewBody');
+
+            centerWrap.style.textAlign = state.align;
+
+            if (state.textSize === 'small') {
+                headEl.style.fontSize = '21px';
+                bodyEl.style.fontSize = '13.5px';
+            } else if (state.textSize === 'large') {
+                headEl.style.fontSize = '29px';
+                bodyEl.style.fontSize = '17.5px';
             } else {
-                swipeHintEl.innerHTML = `Simpan & Bagikan`;
+                headEl.style.fontSize = '25px';
+                bodyEl.style.fontSize = '15.5px';
             }
 
-            // Alignment & Font Sizes
-            const bodyWrap = document.getElementById('canvasBodyWrap');
-            const headlineEl = document.getElementById('canvasHeadline');
-            const bodyEl = document.getElementById('canvasBody');
-
-            bodyWrap.style.textAlign = projectState.align;
-
-            if (projectState.fontSize === 'small') {
-                headlineEl.style.fontSize = '22px';
-                bodyEl.style.fontSize = '14px';
-            } else if (projectState.fontSize === 'large') {
-                headlineEl.style.fontSize = '30px';
-                bodyEl.style.fontSize = '18.5px';
+            if (cur.headline && cur.headline.trim() !== '') {
+                headEl.style.display = 'block';
+                headEl.innerHTML = parseBoldToHtml(cur.headline);
             } else {
-                headlineEl.style.fontSize = '26px';
-                bodyEl.style.fontSize = '16px';
+                headEl.style.display = 'none';
             }
 
-            // Content with *bold* formatting
-            if (current.headline && current.headline.trim() !== '') {
-                headlineEl.style.display = 'block';
-                headlineEl.innerHTML = parseBoldMarkdown(current.headline);
-            } else {
-                headlineEl.style.display = 'none';
-            }
-
-            bodyEl.innerHTML = parseBoldMarkdown(current.body);
+            bodyEl.innerHTML = parseBoldToHtml(cur.body);
         }
 
-        // Slide Actions
-        function selectSlide(idx) {
-            projectState.currentIndex = idx;
-            saveToLocalStorage();
-            renderAll();
-        }
-
-        function updateCurrentSlide() {
+        // Editor Event Handlers
+        function handleSlideTextChange() {
             const headline = document.getElementById('inputHeadline').value;
             const body = document.getElementById('inputBody').value;
-
-            projectState.slides[projectState.currentIndex].headline = headline;
-            projectState.slides[projectState.currentIndex].body = body;
-
-            document.getElementById('charCount').innerText = `${body.length} karakter`;
-            saveToLocalStorage();
-            renderCanvas();
-            renderSidebar();
+            state.slides[state.currentIndex].headline = headline;
+            state.slides[state.currentIndex].body = body;
+            document.getElementById('charCounter').innerText = `${body.length} karakter`;
+            saveState();
+            renderLivePreview();
+            renderSlidesSidebar();
         }
 
+        function handleMetaChange() {
+            state.seriesTag = document.getElementById('inputSeries').value;
+            state.author = document.getElementById('inputAuthor').value;
+            saveState();
+            renderLivePreview();
+        }
+
+        function setFontPreset(preset) {
+            state.fontPreset = preset;
+            syncControlUI();
+            saveState();
+            renderLivePreview();
+        }
+
+        function setPalette(paletteName) {
+            state.palette = paletteName;
+            syncControlUI();
+            saveState();
+            renderLivePreview();
+        }
+
+        function setAlign(alignVal) {
+            state.align = alignVal;
+            syncControlUI();
+            saveState();
+            renderLivePreview();
+        }
+
+        function setTextSize(sizeVal) {
+            state.textSize = sizeVal;
+            syncControlUI();
+            saveState();
+            renderLivePreview();
+        }
+
+        // Slide CRUD Operations
         function addNewSlide() {
-            projectState.slides.push({
+            state.slides.push({
                 headline: '',
-                body: 'Tulis lanjutan cerita di sini dengan *kata kunci* yang menonjol.'
+                body: 'Tulis kelanjutan cerita di sini dengan *poin utama* yang mudah dipahami.'
             });
-            projectState.currentIndex = projectState.slides.length - 1;
-            saveToLocalStorage();
+            state.currentIndex = state.slides.length - 1;
+            saveState();
             renderAll();
         }
 
         function duplicateSlide(idx) {
-            const copy = { ...projectState.slides[idx] };
-            projectState.slides.splice(idx + 1, 0, copy);
-            projectState.currentIndex = idx + 1;
-            saveToLocalStorage();
+            const copy = { ...state.slides[idx] };
+            state.slides.splice(idx + 1, 0, copy);
+            state.currentIndex = idx + 1;
+            saveState();
             renderAll();
+            showToast('Slide diduplikasi');
         }
 
         function deleteSlide(idx) {
-            if (projectState.slides.length <= 1) {
-                alert('Minimal harus ada 1 slide.');
+            if (state.slides.length <= 1) {
+                showToast('Minimal harus ada 1 slide');
                 return;
             }
-            projectState.slides.splice(idx, 1);
-            if (projectState.currentIndex >= projectState.slides.length) {
-                projectState.currentIndex = projectState.slides.length - 1;
+            state.slides.splice(idx, 1);
+            if (state.currentIndex >= state.slides.length) {
+                state.currentIndex = state.slides.length - 1;
             }
-            saveToLocalStorage();
+            saveState();
+            renderAll();
+            showToast('Slide dihapus');
+        }
+
+        function moveSlide(idx, dir) {
+            const target = idx + dir;
+            if (target < 0 || target >= state.slides.length) return;
+            const tmp = state.slides[idx];
+            state.slides[idx] = state.slides[target];
+            state.slides[target] = tmp;
+
+            if (state.currentIndex === idx) state.currentIndex = target;
+            else if (state.currentIndex === target) state.currentIndex = idx;
+
+            saveState();
             renderAll();
         }
 
-        function moveSlide(idx, direction) {
-            const targetIdx = idx + direction;
-            if (targetIdx < 0 || targetIdx >= projectState.slides.length) return;
-
-            const temp = projectState.slides[idx];
-            projectState.slides[idx] = projectState.slides[targetIdx];
-            projectState.slides[targetIdx] = temp;
-
-            if (projectState.currentIndex === idx) {
-                projectState.currentIndex = targetIdx;
-            } else if (projectState.currentIndex === targetIdx) {
-                projectState.currentIndex = idx;
-            }
-
-            saveToLocalStorage();
-            renderAll();
-        }
-
-        // Styling & Meta Updates
-        function setGlobalTheme(themeName) {
-            projectState.theme = themeName;
-            syncGlobalControls();
-            saveToLocalStorage();
-            renderCanvas();
-        }
-
-        function setAlignment(align) {
-            projectState.align = align;
-            syncGlobalControls();
-            saveToLocalStorage();
-            renderCanvas();
-        }
-
-        function setFontSize(size) {
-            projectState.fontSize = size;
-            syncGlobalControls();
-            saveToLocalStorage();
-            renderCanvas();
-        }
-
-        function updateGlobalMeta() {
-            projectState.seriesTag = document.getElementById('inputSeries').value;
-            projectState.author = document.getElementById('inputAuthor').value;
-            saveToLocalStorage();
-            renderCanvas();
-        }
-
-        // Batch Create Modal
+        // Batch Multi-Slide Creator
         function openBatchModal() {
             document.getElementById('batchModal').classList.add('open');
         }
@@ -1128,162 +1383,347 @@ Simpan ide terbaikmu dalam bentuk cerita yang bermakna."></textarea>
             document.getElementById('batchModal').classList.remove('open');
         }
 
-        function processBatchSlides(appendMode) {
-            const raw = document.getElementById('batchTextarea').value.trim();
+        function applyBatchSlides(append) {
+            const raw = document.getElementById('batchInputArea').value.trim();
             if (!raw) {
                 closeBatchModal();
                 return;
             }
 
             const chunks = raw.split(/\n\s*---\s*\n/).map(c => c.trim()).filter(Boolean);
-            const generatedSlides = chunks.map(chunk => {
+            const parsedSlides = chunks.map(chunk => {
                 const lines = chunk.split('\n');
-                if (lines.length > 1 && lines[0].length <= 65) {
+                if (lines.length > 1 && lines[0].trim().length <= 70) {
                     return {
                         headline: lines[0].trim(),
                         body: lines.slice(1).join('\n').trim()
                     };
-                } else {
-                    return {
-                        headline: '',
-                        body: chunk
-                    };
                 }
+                return {
+                    headline: '',
+                    body: chunk
+                };
             });
 
-            if (generatedSlides.length > 0) {
-                if (appendMode) {
-                    projectState.slides = projectState.slides.concat(generatedSlides);
-                    projectState.currentIndex = projectState.slides.length - generatedSlides.length;
+            if (parsedSlides.length > 0) {
+                if (append) {
+                    state.slides = state.slides.concat(parsedSlides);
+                    state.currentIndex = state.slides.length - parsedSlides.length;
                 } else {
-                    projectState.slides = generatedSlides;
-                    projectState.currentIndex = 0;
+                    state.slides = parsedSlides;
+                    state.currentIndex = 0;
                 }
-                saveToLocalStorage();
+                saveState();
                 renderAll();
+                showToast(`${parsedSlides.length} slide berhasil dibuat`);
             }
-
             closeBatchModal();
         }
 
-        // Export & Import JSON Project File (Untuk Backup / Pindah Device)
+        // Project JSON Save & Load
         function exportProjectJSON() {
-            const dataStr = JSON.stringify(projectState, null, 2);
-            const blob = new Blob([dataStr], { type: 'application/json' });
+            const jsonStr = JSON.stringify(state, null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            const dateTag = new Date().toISOString().slice(0, 10);
+            const dateStr = new Date().toISOString().slice(0, 10);
             a.href = url;
-            a.download = `storytelling-ig-${dateTag}.json`;
+            a.download = `storytelling-4x5-${dateStr}.json`;
             a.click();
             URL.revokeObjectURL(url);
+            showToast('File draf (.json) diunduh');
         }
 
         function importProjectJSON(event) {
             const file = event.target.files[0];
             if (!file) return;
-
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
-                    const imported = JSON.parse(e.target.result);
-                    if (imported && Array.isArray(imported.slides) && imported.slides.length > 0) {
-                        projectState = { ...projectState, ...imported, currentIndex: 0 };
-                        saveToLocalStorage();
-                        syncGlobalControls();
+                    const data = JSON.parse(e.target.result);
+                    if (data && Array.isArray(data.slides) && data.slides.length > 0) {
+                        state = { ...state, ...data, currentIndex: 0 };
+                        saveState();
+                        syncControlUI();
                         renderAll();
-                        alert('Proyek berhasil dimuat!');
+                        showToast('Draf berhasil dimuat!');
                     } else {
-                        alert('Format file proyek tidak valid.');
+                        showToast('Format file draf tidak valid');
                     }
                 } catch (err) {
-                    alert('Gagal membaca file proyek.');
+                    showToast('Gagal membaca file draf');
                 }
             };
             reader.readAsText(file);
             event.target.value = '';
         }
 
-        function resetProject() {
-            if (!confirm('Hapus semua slide saat ini dan mulai dari awal?')) return;
-            projectState.slides = [{ headline: '', body: '' }];
-            projectState.currentIndex = 0;
-            saveToLocalStorage();
-            renderAll();
+        // Custom Confirm Reset
+        function openResetConfirm() {
+            document.getElementById('confirmTitle').innerText = 'Reset Semua Slide?';
+            document.getElementById('confirmDesc').innerText = 'Seluruh isi slide saat ini akan dikosongkan dan diganti dengan 1 slide baru.';
+            document.getElementById('confirmModal').classList.add('open');
         }
 
-        // Export High-Res 1080x1350 PNG (Scale 2.5x from 432x540 = exact 1080x1350)
-        async function downloadCurrentSlide() {
-            const btn = document.getElementById('btnDownloadSingle');
-            const originalHTML = btn.innerHTML;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses...';
-            btn.disabled = true;
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').classList.remove('open');
+        }
 
-            try {
-                const canvasEl = document.getElementById('igCanvas');
-                const rendered = await html2canvas(canvasEl, {
-                    scale: 2.5, // 432 * 2.5 = 1080px, 540 * 2.5 = 1350px (Exact IG 4:5 HD)
-                    useCORS: true,
-                    backgroundColor: null
+        document.getElementById('confirmYesBtn').addEventListener('click', () => {
+            state.slides = [{ headline: '', body: '' }];
+            state.currentIndex = 0;
+            saveState();
+            renderAll();
+            closeConfirmModal();
+            showToast('Proyek direset ke slide kosong');
+        });
+
+        // Native High-Resolution HTML5 Canvas Renderer (Exact 1080 x 1350 px)
+        function parseSegments(text) {
+            // Memecah teks menjadi token kata dengan status bold (*...*) dan baris baru (\n)
+            const lines = (text || '').split('\n');
+            return lines.map(line => {
+                const tokens = [];
+                const regex = /(\*[^\*]+\*)/g;
+                let lastIdx = 0;
+                let match;
+                while ((match = regex.exec(line)) !== null) {
+                    if (match.index > lastIdx) {
+                        const plainPart = line.slice(lastIdx, match.index);
+                        plainPart.split(/(\s+)/).forEach(w => {
+                            if (w) tokens.push({ text: w, bold: false });
+                        });
+                    }
+                    const boldInner = match[0].slice(1, -1);
+                    boldInner.split(/(\s+)/).forEach(w => {
+                        if (w) tokens.push({ text: w, bold: true });
+                    });
+                    lastIdx = regex.lastIndex;
+                }
+                if (lastIdx < line.length) {
+                    const rem = line.slice(lastIdx);
+                    rem.split(/(\s+)/).forEach(w => {
+                        if (w) tokens.push({ text: w, bold: false });
+                    });
+                }
+                return tokens;
+            });
+        }
+
+        function layoutWrappedLines(ctx, paragraphs, maxWidth, fontSize, fontFamily, forceBold) {
+            const outputLines = [];
+            paragraphs.forEach(tokens => {
+                if (tokens.length === 0) {
+                    outputLines.push([]);
+                    return;
+                }
+                let currentLine = [];
+                let currentWidth = 0;
+
+                tokens.forEach(tok => {
+                    const isBold = forceBold || tok.bold;
+                    ctx.font = `${isBold ? '700' : '400'} ${fontSize}px ${fontFamily}`;
+                    const w = ctx.measureText(tok.text).width;
+
+                    if (currentWidth + w > maxWidth && currentLine.length > 0 && tok.text.trim() !== '') {
+                        // Trim trailing space on wrapped line
+                        if (currentLine[currentLine.length - 1].text.trim() === '') {
+                            currentLine.pop();
+                        }
+                        outputLines.push(currentLine);
+                        currentLine = [{ text: tok.text, bold: isBold }];
+                        currentWidth = w;
+                    } else {
+                        currentLine.push({ text: tok.text, bold: isBold });
+                        currentWidth += w;
+                    }
                 });
 
+                if (currentLine.length > 0) {
+                    outputLines.push(currentLine);
+                }
+            });
+            return outputLines;
+        }
+
+        async function renderSlideToDataURL(slideIndex) {
+            if (document.fonts && document.fonts.ready) {
+                await document.fonts.ready;
+            }
+
+            const W = 1080;
+            const H = 1350;
+            const PAD_X = 110;
+            const PAD_Y = 115;
+            const MAX_W = W - (PAD_X * 2);
+
+            const canvas = document.createElement('canvas');
+            canvas.width = W;
+            canvas.height = H;
+            const ctx = canvas.getContext('2d');
+
+            const pal = PALETTE_CONFIG[state.palette] || PALETTE_CONFIG['palette-paper-ivory'];
+            const fnt = FONT_CONFIG[state.fontPreset] || FONT_CONFIG['font-preset-editorial'];
+            const slide = state.slides[slideIndex];
+            const total = state.slides.length;
+
+            // 1. Background
+            ctx.fillStyle = pal.bg;
+            ctx.fillRect(0, 0, W, H);
+
+            // 2. Top Header Meta
+            ctx.fillStyle = pal.meta;
+            ctx.font = '600 26px "Inter", sans-serif';
+            ctx.textBaseline = 'top';
+            ctx.textAlign = 'left';
+            ctx.fillText((state.seriesTag || 'STORYTELLING').toUpperCase(), PAD_X, PAD_Y);
+
+            ctx.textAlign = 'right';
+            ctx.fillText(`${String(slideIndex + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`, W - PAD_X, PAD_Y);
+
+            // 3. Bottom Footer Line & Meta
+            const footerY = H - PAD_Y;
+            ctx.strokeStyle = pal.line;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(PAD_X, footerY - 56);
+            ctx.lineTo(W - PAD_X, footerY - 56);
+            ctx.stroke();
+
+            ctx.fillStyle = pal.meta;
+            ctx.font = '500 27px "Inter", sans-serif';
+            ctx.textBaseline = 'bottom';
+            ctx.textAlign = 'left';
+            ctx.fillText(state.author || '', PAD_X, footerY);
+
+            ctx.textAlign = 'right';
+            const swipeLabel = slideIndex < total - 1 ? 'Geser →' : 'Simpan & Bagikan';
+            ctx.fillText(swipeLabel, W - PAD_X, footerY);
+
+            // 4. Center Body & Headline Layout
+            let headSize = 62;
+            let bodySize = 39;
+            if (state.textSize === 'small') {
+                headSize = 52;
+                bodySize = 34;
+            } else if (state.textSize === 'large') {
+                headSize = 72;
+                bodySize = 44;
+            }
+
+            const headLineHeight = Math.round(headSize * 1.25);
+            const bodyLineHeight = Math.round(bodySize * 1.65);
+
+            const hasHeadline = slide.headline && slide.headline.trim() !== '';
+            const headLines = hasHeadline
+                ? layoutWrappedLines(ctx, parseSegments(slide.headline.trim()), MAX_W, headSize, fnt.headlineFamily, true)
+                : [];
+            const bodyLines = layoutWrappedLines(ctx, parseSegments(slide.body || ''), MAX_W, bodySize, fnt.bodyFamily, false);
+
+            const gapBetween = (hasHeadline && bodyLines.length > 0) ? 40 : 0;
+            const totalContentHeight = (headLines.length * headLineHeight) + gapBetween + (bodyLines.length * bodyLineHeight);
+
+            const safeTop = PAD_Y + 70;
+            const safeBottom = footerY - 90;
+            const availableHeight = safeBottom - safeTop;
+            let cursorY = safeTop + Math.max(0, (availableHeight - totalContentHeight) / 2);
+
+            ctx.textBaseline = 'top';
+            ctx.textAlign = 'left';
+
+            // Draw Headline Lines
+            headLines.forEach(lineTokens => {
+                let lineW = 0;
+                lineTokens.forEach(t => {
+                    ctx.font = `700 ${headSize}px ${fnt.headlineFamily}`;
+                    lineW += ctx.measureText(t.text).width;
+                });
+                let cursorX = state.align === 'center' ? (W - lineW) / 2 : PAD_X;
+
+                lineTokens.forEach(t => {
+                    ctx.font = `700 ${headSize}px ${fnt.headlineFamily}`;
+                    ctx.fillStyle = pal.strong;
+                    ctx.fillText(t.text, cursorX, cursorY);
+                    cursorX += ctx.measureText(t.text).width;
+                });
+                cursorY += headLineHeight;
+            });
+
+            cursorY += gapBetween;
+
+            // Draw Body Lines
+            bodyLines.forEach(lineTokens => {
+                let lineW = 0;
+                lineTokens.forEach(t => {
+                    ctx.font = `${t.bold ? '700' : '400'} ${bodySize}px ${fnt.bodyFamily}`;
+                    lineW += ctx.measureText(t.text).width;
+                });
+                let cursorX = state.align === 'center' ? (W - lineW) / 2 : PAD_X;
+
+                lineTokens.forEach(t => {
+                    ctx.font = `${t.bold ? '700' : '400'} ${bodySize}px ${fnt.bodyFamily}`;
+                    ctx.fillStyle = t.bold ? pal.strong : pal.text;
+                    ctx.fillText(t.text, cursorX, cursorY);
+                    cursorX += ctx.measureText(t.text).width;
+                });
+                cursorY += bodyLineHeight;
+            });
+
+            return canvas.toDataURL('image/png');
+        }
+
+        async function downloadCurrentSlidePNG() {
+            const btn = document.getElementById('btnDownloadCurrent');
+            btn.disabled = true;
+            try {
+                const dataUrl = await renderSlideToDataURL(state.currentIndex);
                 const link = document.createElement('a');
-                const slideNum = String(projectState.currentIndex + 1).padStart(2, '0');
-                link.download = `IG-Slide-${slideNum}.png`;
-                link.href = rendered.toDataURL('image/png');
+                const num = String(state.currentIndex + 1).padStart(2, '0');
+                link.download = `IG-Storytelling-Slide-${num}.png`;
+                link.href = dataUrl;
+                document.body.appendChild(link);
                 link.click();
-            } catch (err) {
-                alert('Gagal mengunduh gambar slide.');
+                document.body.removeChild(link);
+                showToast(`Slide ${num} (1080×1350px) berhasil diunduh!`);
+            } catch (e) {
+                showToast('Gagal mengekspor gambar PNG');
             } finally {
-                btn.innerHTML = originalHTML;
                 btn.disabled = false;
             }
         }
 
-        async function downloadAllSlidesZIP() {
+        async function downloadAllSlidesPNG() {
             const btn = document.getElementById('btnDownloadAll');
-            const originalHTML = btn.innerHTML;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyiapkan ZIP...';
             btn.disabled = true;
-
-            const savedIndex = projectState.currentIndex;
-
+            showToast(`Mengunduh ${state.slides.length} slide PNG...`);
             try {
-                const zip = new JSZip();
-                const canvasEl = document.getElementById('igCanvas');
-
-                for (let i = 0; i < projectState.slides.length; i++) {
-                    projectState.currentIndex = i;
-                    renderCanvas();
-                    // Beri jeda singkat agar DOM selesai dirender
-                    await new Promise(r => setTimeout(r, 80));
-
-                    const rendered = await html2canvas(canvasEl, {
-                        scale: 2.5,
-                        useCORS: true,
-                        backgroundColor: null
-                    });
-
-                    const base64Data = rendered.toDataURL('image/png').split(',')[1];
-                    const fileName = `Slide_${String(i + 1).padStart(2, '0')}.png`;
-                    zip.file(fileName, base64Data, { base64: true });
+                for (let i = 0; i < state.slides.length; i++) {
+                    const dataUrl = await renderSlideToDataURL(i);
+                    const link = document.createElement('a');
+                    const num = String(i + 1).padStart(2, '0');
+                    link.download = `IG-Storytelling-Slide-${num}.png`;
+                    link.href = dataUrl;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    await new Promise(r => setTimeout(r, 260));
                 }
-
-                const content = await zip.generateAsync({ type: 'blob' });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(content);
-                link.download = `Instagram_Carousel_4x5_${Date.now()}.zip`;
-                link.click();
-                URL.revokeObjectURL(link.href);
-
-            } catch (err) {
-                alert('Terjadi kesalahan saat mengekspor seluruh slide.');
+                showToast('Semua slide selesai diunduh!');
+            } catch (e) {
+                showToast('Terjadi kesalahan saat mengunduh semua slide');
             } finally {
-                projectState.currentIndex = savedIndex;
-                renderAll();
-                btn.innerHTML = originalHTML;
                 btn.disabled = false;
             }
+        }
+
+        // Toast Feedback
+        let toastTimer = null;
+        function showToast(msg) {
+            const el = document.getElementById('toastEl');
+            el.innerText = msg;
+            el.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
         }
     </script>
 </body>
