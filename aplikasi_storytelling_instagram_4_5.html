@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storytelling 4:5 — Minimalist Carousel Studio</title>
+    
+    <!-- Google Fonts: Plus Jakarta Sans & Inter (Karakteristik bersih, geometris, khas Samsung One UI / Samsung Sharp Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome untuk Ikon Minimalis -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- html2canvas & JSZip untuk Export PNG / ZIP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <style>
+        :root {
+            --bg-app: #F5F5F7;
+            --bg-panel: #FFFFFF;
+            --border-color: #E5E5EA;
+            --text-primary: #111111;
+            --text-secondary: #6E6E73;
+            --accent: #000000;
+            --accent-hover: #2C2C2E;
+            --danger: #FF3B30;
+            --success: #34C759;
+            --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-app);
+            color: var(--text-primary);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Top Navbar */
+        header {
+            height: 60px;
+            background: var(--bg-panel);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .brand-badge {
+            font-size: 11px;
+            font-weight: 600;
+            background: #F2F2F7;
+            color: var(--text-secondary);
+            padding: 3px 8px;
+            border-radius: 6px;
+            letter-spacing: 0.02em;
+        }
+
+        .status-save {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            background: #F9F9FB;
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button {
+            font-family: var(--font-body);
+            cursor: pointer;
+            border: none;
+            outline: none;
+            transition: all 0.15s ease;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .btn-secondary {
+            background: #F2F2F7;
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: #E5E5EA;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #FFFFFF;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-danger-ghost {
+            background: transparent;
+            color: var(--danger);
+            padding: 6px 10px;
+        }
+
+        .btn-danger-ghost:hover {
+            background: rgba(255, 59, 48, 0.08);
+        }
+
+        /* Main Workspace */
+        .workspace {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Left Sidebar: Slide List */
+        .sidebar-slides {
+            width: 240px;
+            background: var(--bg-panel);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sidebar-title {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-secondary);
+        }
+
+        .slides-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .slide-thumb {
+            border: 1.5px solid var(--border-color);
+            border-radius: 10px;
+            padding: 10px;
+            background: #FAFAFC;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            position: relative;
+        }
+
+        .slide-thumb:hover {
+            border-color: #AEAEB2;
+        }
+
+        .slide-thumb.active {
+            border-color: var(--accent);
+            background: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+
+        .thumb-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .thumb-num {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        .slide-thumb.active .thumb-num {
+            color: var(--accent);
+        }
+
+        .thumb-actions {
+            display: flex;
+            gap: 4px;
+            opacity: 0;
+            transition: opacity 0.15s;
+        }
+
+        .slide-thumb:hover .thumb-actions,
+        .slide-thumb.active .thumb-actions {
+            opacity: 1;
+        }
+
+        .thumb-btn {
+            width: 22px;
+            height: 22px;
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+        }
+
+        .thumb-btn:hover {
+            background: #E5E5EA;
+            color: var(--text-primary);
+        }
+
+        .thumb-btn.del:hover {
+            background: rgba(255, 59, 48, 0.12);
+            color: var(--danger);
+        }
+
+        .thumb-preview-text {
+            font-size: 12px;
+            color: var(--text-primary);
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            word-break: break-word;
+        }
+
+        .sidebar-footer {
+            padding: 12px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        /* Center Canvas Area (4:5 Preview) */
+        .canvas-stage {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .canvas-wrapper {
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0,0,0,0.05);
+            border-radius: 4px;
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+
+        /* Rasio Exact 4:5 (1080 x 1350 scaled down to 432 x 540 for clean editing) */
+        .ig-slide-canvas {
+            width: 432px;
+            height: 540px;
+            padding: 44px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            transition: background-color 0.25s ease, color 0.25s ease;
+            user-select: none;
+        }
+
+        /* Themes for Slide */
+        .theme-samsung-light {
+            background-color: #FFFFFF;
+            color: #121212;
+        }
+        .theme-samsung-light .slide-meta { color: #8E8E93; }
+        .theme-samsung-light .slide-divider { background-color: #E5E5EA; }
+        .theme-samsung-light strong { color: #000000; font-weight: 700; }
+
+        .theme-samsung-cream {
+            background-color: #F7F6F2;
+            color: #1A1A1A;
+        }
+        .theme-samsung-cream .slide-meta { color: #8A8880; }
+        .theme-samsung-cream .slide-divider { background-color: #E2E0D8; }
+        .theme-samsung-cream strong { color: #000000; font-weight: 700; }
+
+        .theme-samsung-dark {
+            background-color: #111111;
+            color: #E5E5EA;
+        }
+        .theme-samsung-dark .slide-meta { color: #6E6E73; }
+        .theme-samsung-dark .slide-divider { background-color: #2C2C2E; }
+        .theme-samsung-dark strong { color: #FFFFFF; font-weight: 700; }
+
+        .theme-samsung-navy {
+            background-color: #1428A0; /* Samsung Classic Blue */
+            color: #E8ECFF;
+        }
+        .theme-samsung-navy .slide-meta { color: #8FA2FF; }
+        .theme-samsung-navy .slide-divider { background-color: rgba(255,255,255,0.2); }
+        .theme-samsung-navy strong { color: #FFFFFF; font-weight: 700; }
+
+        /* Slide Internal Layout */
+        .slide-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--font-display);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .slide-body-wrap {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 20px 0;
+        }
+
+        .slide-headline {
+            font-family: var(--font-display);
+            font-size: 26px;
+            font-weight: 700;
+            line-height: 1.25;
+            letter-spacing: -0.025em;
+            margin-bottom: 16px;
+            white-space: pre-wrap;
+        }
+
+        .slide-paragraph {
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.65;
+            letter-spacing: -0.01em;
+            white-space: pre-wrap;
+        }
+
+        .slide-paragraph strong,
+        .slide-headline strong {
+            font-weight: 700;
+        }
+
+        .slide-bottom-bar {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .slide-divider {
+            width: 100%;
+            height: 1px;
+        }
+
+        .slide-footer-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--font-display);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+
+        .canvas-hint {
+            margin-top: 14px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Right Sidebar: Editor & Settings */
+        .sidebar-editor {
+            width: 360px;
+            background: var(--bg-panel);
+            border-left: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .editor-section {
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .editor-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .editor-sublabel {
+            font-size: 11px;
+            font-weight: 400;
+            color: var(--text-secondary);
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            font-family: var(--font-body);
+            font-size: 14px;
+            color: var(--text-primary);
+            background: #F9F9FB;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 12px;
+            transition: border-color 0.15s, background 0.15s;
+            resize: vertical;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: #FFFFFF;
+        }
+
+        textarea {
+            min-height: 150px;
+            line-height: 1.55;
+        }
+
+        .format-tip {
+            margin-top: 8px;
+            font-size: 11.5px;
+            color: var(--text-secondary);
+            background: #F2F2F7;
+            padding: 8px 10px;
+            border-radius: 6px;
+            line-height: 1.4;
+        }
+
+        .format-tip code {
+            font-family: monospace;
+            background: #FFFFFF;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* Theme Selector */
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .theme-option {
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            background: #FFFFFF;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .theme-option.active {
+            border-color: var(--accent);
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .theme-swatch {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 1px solid rgba(0,0,0,0.12);
+        }
+
+        /* Alignment & Font Size Controls */
+        .control-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .segmented-control {
+            display: flex;
+            background: #F2F2F7;
+            padding: 3px;
+            border-radius: 8px;
+            flex: 1;
+        }
+
+        .seg-btn {
+            flex: 1;
+            padding: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            background: transparent;
+            border-radius: 6px;
+        }
+
+        .seg-btn.active {
+            background: #FFFFFF;
+            color: var(--text-primary);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        /* Modal Batch Input */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(3px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .modal-backdrop.open {
+            display: flex;
+        }
+
+        .modal-card {
+            background: #FFFFFF;
+            width: 540px;
+            max-width: 92vw;
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .modal-title {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .modal-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 14px;
+            line-height: 1.5;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        /* Hidden file input */
+        #importFileInput {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            body { height: auto; overflow: auto; }
+            .workspace { flex-direction: column; overflow: visible; }
+            .sidebar-slides, .sidebar-editor { width: 100%; border: none; border-bottom: 1px solid var(--border-color); }
+            .slides-list { flex-direction: row; overflow-x: auto; }
+            .slide-thumb { min-width: 160px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation Bar -->
+    <header>
+        <div class="brand">
+            <i class="fa-solid fa-layer-group"></i>
+            <span>Storytelling Studio</span>
+            <span class="brand-badge">IG 4:5 • Samsung Minimal</span>
+        </div>
+
+        <div class="status-save" id="saveStatus">
+            <span class="status-dot"></span>
+            <span id="saveStatusText">Tersimpan otomatis di browser</span>
+        </div>
+
+        <div class="header-actions">
+            <button class="btn btn-secondary" onclick="openBatchModal()" title="Tulis banyak slide sekaligus">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Buat Banyak Slide
+            </button>
+            <button class="btn btn-secondary" onclick="exportProjectJSON()" title="Simpan file proyek untuk dipindah perangkat">
+                <i class="fa-solid fa-floppy-disk"></i> Simpan File
+            </button>
+            <button class="btn btn-secondary" onclick="document.getElementById('importFileInput').click()" title="Buka file proyek sebelumnya">
+                <i class="fa-solid fa-folder-open"></i> Buka
+            </button>
+            <input type="file" id="importFileInput" accept=".json" onchange="importProjectJSON(event)">
+            <button class="btn btn-primary" onclick="downloadCurrentSlide()" id="btnDownloadSingle">
+                <i class="fa-solid fa-download"></i> Unduh Slide Ini
+            </button>
+            <button class="btn btn-primary" onclick="downloadAllSlidesZIP()" id="btnDownloadAll">
+                <i class="fa-solid fa-file-zipper"></i> Unduh Semua
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <div class="workspace">
+        
+        <!-- Left Sidebar: Slide Deck Navigator -->
+        <aside class="sidebar-slides">
+            <div class="sidebar-header">
+                <span class="sidebar-title">Daftar Slide (<span id="slideCount">1</span>)</span>
+                <button class="btn-danger-ghost" onclick="resetProject()" title="Mulai proyek baru">
+                    <i class="fa-solid fa-rotate-right"></i>
+                </button>
+            </div>
+
+            <div class="slides-list" id="slidesList">
+                <!-- Thumbnails rendered via JS -->
+            </div>
+
+            <div class="sidebar-footer">
+                <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="addNewSlide()">
+                    <i class="fa-solid fa-plus"></i> Tambah Slide Baru
+                </button>
+            </div>
+        </aside>
+
+        <!-- Center Stage: Live 4:5 Instagram Canvas -->
+        <main class="canvas-stage">
+            <div class="canvas-wrapper">
+                <div id="igCanvas" class="ig-slide-canvas theme-samsung-light">
+                    <!-- Top Header inside Slide -->
+                    <div class="slide-top-bar slide-meta">
+                        <span id="canvasSeriesTag">STORYTELLING</span>
+                        <span id="canvasPageIndicator">01 / 01</span>
+                    </div>
+
+                    <!-- Main Content inside Slide -->
+                    <div class="slide-body-wrap" id="canvasBodyWrap">
+                        <div class="slide-headline" id="canvasHeadline"></div>
+                        <div class="slide-paragraph" id="canvasBody"></div>
+                    </div>
+
+                    <!-- Bottom Footer inside Slide -->
+                    <div class="slide-bottom-bar">
+                        <div class="slide-divider"></div>
+                        <div class="slide-footer-info slide-meta">
+                            <span id="canvasAuthor">@username</span>
+                            <span id="canvasSwipeHint">Geser <i class="fa-solid fa-arrow-right" style="font-size: 10px; margin-left: 3px;"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="canvas-hint">
+                <span><i class="fa-regular fa-rectangle-portrait"></i> Rasio 4:5 (1080 × 1350 px saat diunduh)</span>
+                <span>•</span>
+                <span>Otomatis tersimpan jika tab ditutup</span>
+            </div>
+        </main>
+
+        <!-- Right Sidebar: Editor & Styling -->
+        <aside class="sidebar-editor">
+            
+            <!-- Text Content Editor -->
+            <div class="editor-section">
+                <div class="editor-label">
+                    <span>Judul Utama (Opsional)</span>
+                    <span class="editor-sublabel">Gunakan *teks* untuk bold</span>
+                </div>
+                <input type="text" id="inputHeadline" placeholder="Contoh: *5 Pelajaran* Hari Ini..." oninput="updateCurrentSlide()">
+
+                <div class="editor-label" style="margin-top: 16px;">
+                    <span>Isi Cerita / Storytelling</span>
+                    <span class="editor-sublabel" id="charCount">0 karakter</span>
+                </div>
+                <textarea id="inputBody" placeholder="Tulis cerita Anda di sini. Apit kata dengan tanda bintang seperti *ini* agar otomatis menjadi tebal..." oninput="updateCurrentSlide()"></textarea>
+
+                <div class="format-tip">
+                    <i class="fa-solid fa-circle-info"></i> Ketik <code>*kata penting*</code> akan otomatis tampil <strong>kata penting</strong> di dalam slide.
+                </div>
+            </div>
+
+            <!-- Theme & Typography Settings -->
+            <div class="editor-section">
+                <div class="editor-label">
+                    <span>Tema Warna Minimalis</span>
+                    <span class="editor-sublabel">Terapkan ke semua</span>
+                </div>
+                <div class="theme-grid">
+                    <button class="theme-option active" data-theme="theme-samsung-light" onclick="setGlobalTheme('theme-samsung-light')">
+                        <span class="theme-swatch" style="background: #FFFFFF;"></span>
+                        <span>Pure White</span>
+                    </button>
+                    <button class="theme-option" data-theme="theme-samsung-cream" onclick="setGlobalTheme('theme-samsung-cream')">
+                        <span class="theme-swatch" style="background: #F7F6F2;"></span>
+                        <span>Warm Paper</span>
+                    </button>
+                    <button class="theme-option" data-theme="theme-samsung-dark" onclick="setGlobalTheme('theme-samsung-dark')">
+                        <span class="theme-swatch" style="background: #111111;"></span>
+                        <span>OLED Dark</span>
+                    </button>
+                    <button class="theme-option" data-theme="theme-samsung-navy" onclick="setGlobalTheme('theme-samsung-navy')">
+                        <span class="theme-swatch" style="background: #1428A0;"></span>
+                        <span>Classic Blue</span>
+                    </button>
+                </div>
+
+                <div class="control-row">
+                    <div class="segmented-control">
+                        <button class="seg-btn active" id="alignLeftBtn" onclick="setAlignment('left')">
+                            <i class="fa-solid fa-align-left"></i> Rata Kiri
+                        </button>
+                        <button class="seg-btn" id="alignCenterBtn" onclick="setAlignment('center')">
+                            <i class="fa-solid fa-align-center"></i> Tengah
+                        </button>
+                    </div>
+                    <div class="segmented-control">
+                        <button class="seg-btn" id="sizeSmBtn" onclick="setFontSize('small')">Kecil</button>
+                        <button class="seg-btn active" id="sizeMdBtn" onclick="setFontSize('medium')">Sedang</button>
+                        <button class="seg-btn" id="sizeLgBtn" onclick="setFontSize('large')">Besar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Global Identity (Header & Footer) -->
+            <div class="editor-section" style="border-bottom: none;">
+                <div class="editor-label">
+                    <span>Identitas Series (Semua Slide)</span>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="inputSeries" placeholder="Tag Series (misal: CATATAN)" oninput="updateGlobalMeta()">
+                    <input type="text" id="inputAuthor" placeholder="@akunanda" oninput="updateGlobalMeta()">
+                </div>
+            </div>
+
+        </aside>
+    </div>
+
+    <!-- Modal: Buat Banyak Slide Sekaligus -->
+    <div class="modal-backdrop" id="batchModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title">Buat Banyak Slide Sekaligus</h3>
+                <button class="thumb-btn" onclick="closeBatchModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p class="modal-desc">
+                Tulis seluruh naskah storytelling Anda di bawah ini. Pisahkan antar-slide menggunakan tanda tiga garis mendatar (<code>---</code>) pada baris baru. Baris pertama tiap bagian otomatis menjadi judul jika pendek, dan gunakan <code>*teks*</code> untuk huruf tebal.
+            </p>
+            <textarea id="batchTextarea" style="min-height: 220px;" placeholder="*Mulai dari hal kecil*
+Konsistensi bukan tentang melakukan hal besar sekali waktu, melainkan *langkah sederhana* yang diulang setiap hari.
+---
+*Jangan takut berhenti sejenak*
+Jika hari ini terasa berat, simpan tulisanmu dan *lanjutkan esok hari* dengan pikiran yang lebih jernih.
+---
+*Kesimpulan*
+Simpan ide terbaikmu dalam bentuk cerita yang bermakna."></textarea>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeBatchModal()">Batal</button>
+                <button class="btn btn-secondary" onclick="processBatchSlides(true)">Tambahkan ke Slide Ada</button>
+                <button class="btn btn-primary" onclick="processBatchSlides(false)">Ganti Semua Slide</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State Management
+        const STORAGE_KEY = 'ig_storytelling_samsung_4x5_v1';
+
+        let projectState = {
+            theme: 'theme-samsung-light',
+            align: 'left',
+            fontSize: 'medium',
+            seriesTag: 'CATATAN HARIAN',
+            author: '@ceritakita',
+            currentIndex: 0,
+            slides: [
+                {
+                    headline: 'Seni Bercerita yang *Sederhana*',
+                    body: 'Terkadang, pesan paling kuat justru lahir dari tampilan yang *bersih* dan tanpa gangguan.\n\nApit kata dengan tanda bintang seperti *ini* untuk memberi penekanan otomatis.'
+                },
+                {
+                    headline: 'Bisa Disimpan & *Dilanjutkan Besok*',
+                    body: 'Semua tulisan Anda otomatis tersimpan di browser ini.\n\nTutup halaman kapan saja, dan lanjutkan kembali esok hari tanpa kehilangan satu kata pun.'
+                }
+            ]
+        };
+
+        // Initialization
+        window.addEventListener('DOMContentLoaded', () => {
+            loadFromLocalStorage();
+            syncGlobalControls();
+            renderAll();
+        });
+
+        // Parse *text* into <strong>text</strong> safely
+        function parseBoldMarkdown(rawText) {
+            if (!rawText) return '';
+            // Escape HTML tags first to prevent XSS
+            const escaped = rawText
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+            // Replace *text* with <strong>text</strong>
+            return escaped.replace(/\*([^\*\n]+)\*/g, '<strong>$1</strong>');
+        }
+
+        // Save to LocalStorage automatically
+        function saveToLocalStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(projectState));
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+                document.getElementById('saveStatusText').innerText = `Tersimpan otomatis (${timeStr})`;
+            } catch (e) {
+                document.getElementById('saveStatusText').innerText = 'Gagal menyimpan otomatis';
+            }
+        }
+
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (parsed && Array.isArray(parsed.slides) && parsed.slides.length > 0) {
+                        projectState = { ...projectState, ...parsed };
+                        if (projectState.currentIndex >= projectState.slides.length) {
+                            projectState.currentIndex = 0;
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error memuat data tersimpan:', e);
+                }
+            }
+        }
+
+        // Sync inputs with global settings
+        function syncGlobalControls() {
+            document.getElementById('inputSeries').value = projectState.seriesTag || '';
+            document.getElementById('inputAuthor').value = projectState.author || '';
+
+            // Theme active button
+            document.querySelectorAll('.theme-option').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.theme === projectState.theme);
+            });
+
+            // Align buttons
+            document.getElementById('alignLeftBtn').classList.toggle('active', projectState.align === 'left');
+            document.getElementById('alignCenterBtn').classList.toggle('active', projectState.align === 'center');
+
+            // Font size buttons
+            document.getElementById('sizeSmBtn').classList.toggle('active', projectState.fontSize === 'small');
+            document.getElementById('sizeMdBtn').classList.toggle('active', projectState.fontSize === 'medium');
+            document.getElementById('sizeLgBtn').classList.toggle('active', projectState.fontSize === 'large');
+        }
+
+        // Render Sidebar Thumbnails & Active Canvas
+        function renderAll() {
+            renderSidebar();
+            renderEditorInputs();
+            renderCanvas();
+        }
+
+        function renderSidebar() {
+            const listEl = document.getElementById('slidesList');
+            document.getElementById('slideCount').innerText = projectState.slides.length;
+            listEl.innerHTML = '';
+
+            projectState.slides.forEach((slide, idx) => {
+                const isActive = idx === projectState.currentIndex;
+                const cleanPreview = (slide.headline || slide.body || '(Slide Kosong)').replace(/\*/g, '');
+
+                const item = document.createElement('div');
+                item.className = `slide-thumb ${isActive ? 'active' : ''}`;
+                item.onclick = () => selectSlide(idx);
+
+                item.innerHTML = `
+                    <div class="thumb-top">
+                        <span class="thumb-num">SLIDE ${String(idx + 1).padStart(2, '0')}</span>
+                        <div class="thumb-actions" onclick="event.stopPropagation()">
+                            <button class="thumb-btn" onclick="moveSlide(${idx}, -1)" title="Geser ke atas" ${idx === 0 ? 'disabled style="opacity:0.3"' : ''}>
+                                <i class="fa-solid fa-arrow-up"></i>
+                            </button>
+                            <button class="thumb-btn" onclick="moveSlide(${idx}, 1)" title="Geser ke bawah" ${idx === projectState.slides.length - 1 ? 'disabled style="opacity:0.3"' : ''}>
+                                <i class="fa-solid fa-arrow-down"></i>
+                            </button>
+                            <button class="thumb-btn" onclick="duplicateSlide(${idx})" title="Duplikat slide">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                            <button class="thumb-btn del" onclick="deleteSlide(${idx})" title="Hapus slide">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="thumb-preview-text">${cleanPreview}</div>
+                `;
+                listEl.appendChild(item);
+            });
+        }
+
+        function renderEditorInputs() {
+            const current = projectState.slides[projectState.currentIndex];
+            document.getElementById('inputHeadline').value = current.headline || '';
+            document.getElementById('inputBody').value = current.body || '';
+            document.getElementById('charCount').innerText = `${(current.body || '').length} karakter`;
+        }
+
+        function renderCanvas() {
+            const canvas = document.getElementById('igCanvas');
+            const current = projectState.slides[projectState.currentIndex];
+            const total = projectState.slides.length;
+            const idx = projectState.currentIndex;
+
+            // Apply Theme
+            canvas.className = `ig-slide-canvas ${projectState.theme}`;
+
+            // Top & Bottom Meta
+            document.getElementById('canvasSeriesTag').innerText = projectState.seriesTag || 'STORYTELLING';
+            document.getElementById('canvasPageIndicator').innerText = `${String(idx + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+            document.getElementById('canvasAuthor').innerText = projectState.author || '';
+
+            const swipeHintEl = document.getElementById('canvasSwipeHint');
+            if (idx < total - 1) {
+                swipeHintEl.innerHTML = `Geser <i class="fa-solid fa-arrow-right" style="font-size: 10px; margin-left: 3px;"></i>`;
+            } else {
+                swipeHintEl.innerHTML = `Simpan & Bagikan`;
+            }
+
+            // Alignment & Font Sizes
+            const bodyWrap = document.getElementById('canvasBodyWrap');
+            const headlineEl = document.getElementById('canvasHeadline');
+            const bodyEl = document.getElementById('canvasBody');
+
+            bodyWrap.style.textAlign = projectState.align;
+
+            if (projectState.fontSize === 'small') {
+                headlineEl.style.fontSize = '22px';
+                bodyEl.style.fontSize = '14px';
+            } else if (projectState.fontSize === 'large') {
+                headlineEl.style.fontSize = '30px';
+                bodyEl.style.fontSize = '18.5px';
+            } else {
+                headlineEl.style.fontSize = '26px';
+                bodyEl.style.fontSize = '16px';
+            }
+
+            // Content with *bold* formatting
+            if (current.headline && current.headline.trim() !== '') {
+                headlineEl.style.display = 'block';
+                headlineEl.innerHTML = parseBoldMarkdown(current.headline);
+            } else {
+                headlineEl.style.display = 'none';
+            }
+
+            bodyEl.innerHTML = parseBoldMarkdown(current.body);
+        }
+
+        // Slide Actions
+        function selectSlide(idx) {
+            projectState.currentIndex = idx;
+            saveToLocalStorage();
+            renderAll();
+        }
+
+        function updateCurrentSlide() {
+            const headline = document.getElementById('inputHeadline').value;
+            const body = document.getElementById('inputBody').value;
+
+            projectState.slides[projectState.currentIndex].headline = headline;
+            projectState.slides[projectState.currentIndex].body = body;
+
+            document.getElementById('charCount').innerText = `${body.length} karakter`;
+            saveToLocalStorage();
+            renderCanvas();
+            renderSidebar();
+        }
+
+        function addNewSlide() {
+            projectState.slides.push({
+                headline: '',
+                body: 'Tulis lanjutan cerita di sini dengan *kata kunci* yang menonjol.'
+            });
+            projectState.currentIndex = projectState.slides.length - 1;
+            saveToLocalStorage();
+            renderAll();
+        }
+
+        function duplicateSlide(idx) {
+            const copy = { ...projectState.slides[idx] };
+            projectState.slides.splice(idx + 1, 0, copy);
+            projectState.currentIndex = idx + 1;
+            saveToLocalStorage();
+            renderAll();
+        }
+
+        function deleteSlide(idx) {
+            if (projectState.slides.length <= 1) {
+                alert('Minimal harus ada 1 slide.');
+                return;
+            }
+            projectState.slides.splice(idx, 1);
+            if (projectState.currentIndex >= projectState.slides.length) {
+                projectState.currentIndex = projectState.slides.length - 1;
+            }
+            saveToLocalStorage();
+            renderAll();
+        }
+
+        function moveSlide(idx, direction) {
+            const targetIdx = idx + direction;
+            if (targetIdx < 0 || targetIdx >= projectState.slides.length) return;
+
+            const temp = projectState.slides[idx];
+            projectState.slides[idx] = projectState.slides[targetIdx];
+            projectState.slides[targetIdx] = temp;
+
+            if (projectState.currentIndex === idx) {
+                projectState.currentIndex = targetIdx;
+            } else if (projectState.currentIndex === targetIdx) {
+                projectState.currentIndex = idx;
+            }
+
+            saveToLocalStorage();
+            renderAll();
+        }
+
+        // Styling & Meta Updates
+        function setGlobalTheme(themeName) {
+            projectState.theme = themeName;
+            syncGlobalControls();
+            saveToLocalStorage();
+            renderCanvas();
+        }
+
+        function setAlignment(align) {
+            projectState.align = align;
+            syncGlobalControls();
+            saveToLocalStorage();
+            renderCanvas();
+        }
+
+        function setFontSize(size) {
+            projectState.fontSize = size;
+            syncGlobalControls();
+            saveToLocalStorage();
+            renderCanvas();
+        }
+
+        function updateGlobalMeta() {
+            projectState.seriesTag = document.getElementById('inputSeries').value;
+            projectState.author = document.getElementById('inputAuthor').value;
+            saveToLocalStorage();
+            renderCanvas();
+        }
+
+        // Batch Create Modal
+        function openBatchModal() {
+            document.getElementById('batchModal').classList.add('open');
+        }
+
+        function closeBatchModal() {
+            document.getElementById('batchModal').classList.remove('open');
+        }
+
+        function processBatchSlides(appendMode) {
+            const raw = document.getElementById('batchTextarea').value.trim();
+            if (!raw) {
+                closeBatchModal();
+                return;
+            }
+
+            const chunks = raw.split(/\n\s*---\s*\n/).map(c => c.trim()).filter(Boolean);
+            const generatedSlides = chunks.map(chunk => {
+                const lines = chunk.split('\n');
+                if (lines.length > 1 && lines[0].length <= 65) {
+                    return {
+                        headline: lines[0].trim(),
+                        body: lines.slice(1).join('\n').trim()
+                    };
+                } else {
+                    return {
+                        headline: '',
+                        body: chunk
+                    };
+                }
+            });
+
+            if (generatedSlides.length > 0) {
+                if (appendMode) {
+                    projectState.slides = projectState.slides.concat(generatedSlides);
+                    projectState.currentIndex = projectState.slides.length - generatedSlides.length;
+                } else {
+                    projectState.slides = generatedSlides;
+                    projectState.currentIndex = 0;
+                }
+                saveToLocalStorage();
+                renderAll();
+            }
+
+            closeBatchModal();
+        }
+
+        // Export & Import JSON Project File (Untuk Backup / Pindah Device)
+        function exportProjectJSON() {
+            const dataStr = JSON.stringify(projectState, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const dateTag = new Date().toISOString().slice(0, 10);
+            a.href = url;
+            a.download = `storytelling-ig-${dateTag}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importProjectJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (imported && Array.isArray(imported.slides) && imported.slides.length > 0) {
+                        projectState = { ...projectState, ...imported, currentIndex: 0 };
+                        saveToLocalStorage();
+                        syncGlobalControls();
+                        renderAll();
+                        alert('Proyek berhasil dimuat!');
+                    } else {
+                        alert('Format file proyek tidak valid.');
+                    }
+                } catch (err) {
+                    alert('Gagal membaca file proyek.');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        function resetProject() {
+            if (!confirm('Hapus semua slide saat ini dan mulai dari awal?')) return;
+            projectState.slides = [{ headline: '', body: '' }];
+            projectState.currentIndex = 0;
+            saveToLocalStorage();
+            renderAll();
+        }
+
+        // Export High-Res 1080x1350 PNG (Scale 2.5x from 432x540 = exact 1080x1350)
+        async function downloadCurrentSlide() {
+            const btn = document.getElementById('btnDownloadSingle');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses...';
+            btn.disabled = true;
+
+            try {
+                const canvasEl = document.getElementById('igCanvas');
+                const rendered = await html2canvas(canvasEl, {
+                    scale: 2.5, // 432 * 2.5 = 1080px, 540 * 2.5 = 1350px (Exact IG 4:5 HD)
+                    useCORS: true,
+                    backgroundColor: null
+                });
+
+                const link = document.createElement('a');
+                const slideNum = String(projectState.currentIndex + 1).padStart(2, '0');
+                link.download = `IG-Slide-${slideNum}.png`;
+                link.href = rendered.toDataURL('image/png');
+                link.click();
+            } catch (err) {
+                alert('Gagal mengunduh gambar slide.');
+            } finally {
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
+            }
+        }
+
+        async function downloadAllSlidesZIP() {
+            const btn = document.getElementById('btnDownloadAll');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyiapkan ZIP...';
+            btn.disabled = true;
+
+            const savedIndex = projectState.currentIndex;
+
+            try {
+                const zip = new JSZip();
+                const canvasEl = document.getElementById('igCanvas');
+
+                for (let i = 0; i < projectState.slides.length; i++) {
+                    projectState.currentIndex = i;
+                    renderCanvas();
+                    // Beri jeda singkat agar DOM selesai dirender
+                    await new Promise(r => setTimeout(r, 80));
+
+                    const rendered = await html2canvas(canvasEl, {
+                        scale: 2.5,
+                        useCORS: true,
+                        backgroundColor: null
+                    });
+
+                    const base64Data = rendered.toDataURL('image/png').split(',')[1];
+                    const fileName = `Slide_${String(i + 1).padStart(2, '0')}.png`;
+                    zip.file(fileName, base64Data, { base64: true });
+                }
+
+                const content = await zip.generateAsync({ type: 'blob' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(content);
+                link.download = `Instagram_Carousel_4x5_${Date.now()}.zip`;
+                link.click();
+                URL.revokeObjectURL(link.href);
+
+            } catch (err) {
+                alert('Terjadi kesalahan saat mengekspor seluruh slide.');
+            } finally {
+                projectState.currentIndex = savedIndex;
+                renderAll();
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
+```
+
+### Fitur Utama yang Sudah Disertakan:
+1. **Rasio Exact Instagram 4:5 (1080 × 1350 px):** Pratinjau langsung proporsional di layar dan otomatis diekspor ke resolusi HD penuh (`1080 × 1350 px`) dalam format PNG satuan atau `.zip` sekaligus.
+2. **Tipografi Klasik Minimalis ala Samsung:** Menggunakan perpaduan *Plus Jakarta Sans* & *Inter* dengan proporsi spasi lapang dan pilihan 4 tema warna khas (*Pure White*, *Warm Paper*, *OLED Dark*, dan *Samsung Classic Blue*).
+3. **Auto-Bold dengan `*teks*`:** Cukup apit kata atau frasa dengan tanda bintang (contoh: `*langkah sederhana*`), tampilan di slide otomatis berubah menjadi **bold** (*langkah sederhana*).
+4. **Buat Banyak Slide Sekaligus:** Klik tombol **Buat Banyak Slide**, tulis naskah panjang Anda, dan pisahkan antar-slide menggunakan `---` untuk memecahnya menjadi banyak slide secara instan.
+5. **Simpan Otomatis & File Proyek (`.json`):** Setiap ketikan tersimpan otomatis di browser (`localStorage`) sehingga aman ditutup dan dilanjutkan besok. Tersedia juga tombol **Simpan File** dan **Buka** jika Anda ingin melanjutkan pengerjaan di laptop atau HP lain.
